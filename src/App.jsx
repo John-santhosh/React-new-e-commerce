@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { About, Products, Home, Error, SingleProduct } from "./pages/index";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 function App() {
   return (
     <BrowserRouter>
@@ -12,6 +13,7 @@ function App() {
         <Route path="/products/:id" element={<SingleProduct />}></Route>
         <Route path="*" element={<Error />}></Route>
       </Routes>
+      <Footer></Footer>
     </BrowserRouter>
   );
 }

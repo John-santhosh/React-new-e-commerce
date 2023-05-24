@@ -4,7 +4,7 @@ import { OPEN_SIDEBAR, CLOSE_SIDEBAR } from "./actions";
 const GlobalContext = createContext();
 
 const AppContext = ({ children }) => {
-  const initialState = { isSideBarOpen: true };
+  const initialState = { isSideBarOpen: false };
   const [state, dispatch] = useReducer(reducer, initialState);
 
   // open sidebar

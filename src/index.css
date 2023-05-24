@@ -4,6 +4,7 @@
   padding: 0;
   margin: 0;
   font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
 }
 
 :root {
@@ -41,6 +42,7 @@ html {
 }
 ::-webkit-scrollbar {
   width: 8px;
+  display: none;
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;

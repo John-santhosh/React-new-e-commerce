@@ -3,7 +3,7 @@ import App from "./App.jsx";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./index.css";
 import AppContext from "./Context.jsx";
-
+import "animate.css";
 ReactDOM.createRoot(document.getElementById("root")).render(
   <AppContext>
     <App />
