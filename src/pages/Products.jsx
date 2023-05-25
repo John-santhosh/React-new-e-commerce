@@ -2,6 +2,8 @@ import styled from "styled-components";
 import Hero from "../components/Hero";
 import { BsFillGridFill, BsGrid3X3GapFill, BsListUl } from "react-icons/bs";
 import GridProducts from "../components/GridProducts";
+import GridProducts2 from "../components/GridProducts2";
+import ListProducts from "../components/ListProducts";
 const Products = () => {
   return (
     <Wrapper>
@@ -32,7 +34,9 @@ const Products = () => {
               </button>
             </div>
           </div>
-          <GridProducts></GridProducts>
+          {/* <GridProducts></GridProducts> */}
+          {/* <GridProducts2></GridProducts2> */}
+          <ListProducts></ListProducts>
         </div>
       </div>
     </Wrapper>
@@ -51,26 +55,43 @@ const Wrapper = styled.section`
       grid-template-columns: unset;
     }
   }
-  @media only screen and (max-width: 570px) {
-  }
+
   .sorting,
   .price_sorting {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* background-color: red; */
   }
   .price_sorting {
     gap: 2rem;
   }
-  .view {
-    background-color: red;
-    > * {
-      margin: 0 1rem;
-    }
+  .sorting {
+    margin-bottom: 2rem;
   }
   p {
     margin: 0;
+  }
+  @media only screen and (max-width: 570px) {
+    .sorting,
+    .price_sorting {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .price_sorting {
+      gap: 0;
+    }
+    p {
+      margin: 1rem 0;
+    }
+  }
+  svg {
+    color: var(--clr-p-4);
+    font-size: 1.2rem;
+  }
+  .view {
+    > button:nth-child(2) {
+      margin: 0 1.2rem;
+    }
   }
 `;
 export default Products;

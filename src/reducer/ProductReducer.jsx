@@ -28,7 +28,11 @@ const reducer = (state, { type, payload }) => {
   // single product
   if (type === GET_SINGLE_PRODUCTS_BEGIN) {
     // console.log("reducer" + true);
-    return { ...state, single_product_loading: true };
+    return {
+      ...state,
+      single_product_loading: true,
+      single_product_error: false,
+    };
   }
   if (type === GET_SINGLE_PRODUCTS_SUCCESS) {
     // console.log("reducer" + "success");

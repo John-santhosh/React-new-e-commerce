@@ -16,7 +16,7 @@ const SingleProduct = () => {
 
   useEffect(() => {
     fetchSingleProduct(id);
-  }, []);
+  }, [id]);
 
   console.log(single_product);
 
@@ -33,22 +33,12 @@ const SingleProduct = () => {
     );
   }
 
-  // if (single_product_loading) {
-  //   console.log("loading");
-  //   return (
-  //     <Wrapper>
-  //       <div className="custom-loader"></div>
-  //     </Wrapper>
-  //   );
-  // }
-  // console.log("loading comp");
-
-  // console.log("loading comp");
-
-  // console.log(single_product);
-
   const { name, images, price, stars, description, colors } = single_product;
-  const [mainImg, setMainImg] = useState(images[0]?.url);
+  const [mainImg, setMainImg] = useState(images?.[0]?.url);
+  useEffect(() => {
+    setMainImg(images?.[0]?.url);
+  }, [images]);
+
   return (
     <Wrapper>
       <Hero page={name} extra></Hero>
@@ -58,6 +48,7 @@ const SingleProduct = () => {
         ) : (
           <>
             <div className="img-container">
+              {console.log(123)}
               <img src={mainImg} alt="main-img" />
               <div className="sub-images">
                 {images?.map(({ id, url }) => {
