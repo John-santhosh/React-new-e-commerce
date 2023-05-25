@@ -12,7 +12,7 @@ import { FaChevronDown } from "react-icons/fa";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
-import { useGlobalContext } from "../Context";
+import { useGlobalContext } from "../context/Context";
 
 const Navbar = () => {
   const { openSidebar } = useGlobalContext();
@@ -143,13 +143,14 @@ const Wrapper = styled.nav`
       width: 100%;
     }
     div.sidebar {
-      display: block;
+      /* display: block; */
+      /* z-index: -999999; */
+      /* visibility: hidden; */
     }
   }
   /* sidebar */
 
   .sidebar {
-    display: none;
     z-index: -99;
     top: 0;
     position: absolute;
@@ -159,9 +160,10 @@ const Wrapper = styled.nav`
     opacity: 0;
     transition: var(--transition);
     overflow: hidden;
+    transform: translateX(-100%);
     > div {
-      transform: translateX(100%);
       transition: var(--transition);
+      transform: translateX(100%);
       background-color: #fff;
       padding: 1rem;
       position: absolute;
@@ -198,6 +200,7 @@ const Wrapper = styled.nav`
   .sidebar_open {
     z-index: 99;
     opacity: 1;
+    transform: translateX(0);
     > div {
       transform: translateX(0);
     }

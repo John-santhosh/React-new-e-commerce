@@ -32,6 +32,10 @@
 
   /*  */
   --transition: 0.4s all;
+
+  /* hero heading space */
+
+  --h2-pos: 9rem;
 }
 
 body {
@@ -62,7 +66,7 @@ a {
 }
 
 .section-center {
-  width: clamp(300px, 90%, 1200px);
+  width: clamp(300px, 90%, 1300px);
   margin: auto;
 }
 

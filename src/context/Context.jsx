@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer } from "react";
-import { reducer } from "./reducer/AppReducer";
-import { OPEN_SIDEBAR, CLOSE_SIDEBAR } from "./actions";
+import { reducer } from "../reducer/AppReducer";
+import { OPEN_SIDEBAR, CLOSE_SIDEBAR } from "../actions";
 const GlobalContext = createContext();
 
 const AppContext = ({ children }) => {

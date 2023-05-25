@@ -1,6 +1,6 @@
 import { FaTimes } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
-import { useGlobalContext } from "../Context";
+import { useGlobalContext } from "../context/Context";
 import logo from "../assets/logo.svg";
 const Sidebar = () => {
   const { state, closeSidebar } = useGlobalContext();
