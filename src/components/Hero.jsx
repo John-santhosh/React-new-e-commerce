@@ -4,9 +4,9 @@ import styled from "styled-components";
 const Hero = ({ page, extra }) => {
   return (
     <Wrapper className="d-flex justify-content-center align-items-center">
-      <Link to="home">Home / </Link>
-      {extra && <Link to="products">Products / </Link>}
-      {page}
+      <Link to="/">Home / </Link>
+      {extra && <Link to="/products">&nbsp; Products / </Link>}
+      &nbsp;{page}
     </Wrapper>
   );
 };
@@ -14,11 +14,15 @@ const Hero = ({ page, extra }) => {
 const Wrapper = styled.div`
   background-color: var(--clr-p-9);
   text-align: center;
-  height: 5rem;
+  height: 7rem;
   margin: 3rem 0;
   color: var(--clr-p-1);
+  font-weight: 700;
+  font-size: 1.4rem;
+  text-transform: capitalize;
   a {
     /* transition: var(--transition); */
+    text-transform: uppercase;
     color: var(--clr-p-6);
     :hover {
       color: var(--clr-p-3);
