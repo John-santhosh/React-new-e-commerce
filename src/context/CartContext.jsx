@@ -23,8 +23,12 @@ const CartContext = ({ children }) => {
   }, [state.cart]);
 
   // add item
-  const addItem = (item) => {
-    dispatch({ type: ADD_CART_ITEM, payload: item });
+  const addItem = (item, productLimited, productAdded) => {
+    dispatch({
+      type: ADD_CART_ITEM,
+      payload: item,
+      functions: { productLimited, productAdded },
+    });
   };
 
   //remove item
@@ -33,18 +37,17 @@ const CartContext = ({ children }) => {
   };
 
   // count
-  const ToggleCount = ({ id, act }) => {
-    dispatch({ type: TOGGLE_AMT, payload: { id, act } });
+  const ToggleCount = ({ id, act }, productLimited) => {
+    dispatch({
+      type: TOGGLE_AMT,
+      payload: { id, act },
+      functions: { productLimited },
+    });
   };
 
   // clear cart
   const clearCart = () => {
     dispatch({ type: CLEAR_CART });
-  };
-
-  // count totalAmount
-  const totalAmount = () => {
-    dispatch({ type: GET_TOTAL });
   };
 
   return (

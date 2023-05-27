@@ -9,13 +9,13 @@ import CartContext from "./context/CartContext.jsx";
 import FilterContext from "./context/FilterContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <CartContext>
-    <ProductsContext>
-      <FilterContext>
-        <AppContext>
+  <ProductsContext>
+    <FilterContext>
+      <AppContext>
+        <CartContext>
           <App />
-        </AppContext>
-      </FilterContext>
-    </ProductsContext>
-  </CartContext>
+        </CartContext>
+      </AppContext>
+    </FilterContext>
+  </ProductsContext>
 );

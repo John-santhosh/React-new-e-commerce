@@ -3,10 +3,8 @@ import { useProductsProvider } from "../context/ProductsContext";
 import { Link } from "react-router-dom";
 import { AiOutlineHeart, AiFillEye } from "react-icons/ai";
 const GridProducts2 = () => {
-  const { products_error, products_loading, products } = useProductsProvider();
-  if (products_error) {
-    return <div>There was an error Loading</div>;
-  }
+  const { products_loading, products } = useProductsProvider();
+
   return (
     <Wrapper className="products">
       {products_loading ? (

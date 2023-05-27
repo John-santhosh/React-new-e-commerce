@@ -6,7 +6,11 @@ const ProductsPageGrid = () => {
   const { featured_Products, products_loading, products_error } =
     useProductsProvider();
   if (products_error) {
-    return <div>There was an error Loading</div>;
+    return (
+      <div>
+        <h3 className="text-center my-4">There was an error Loading</h3>
+      </div>
+    );
   }
   return (
     <Wrapper className="products">

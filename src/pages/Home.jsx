@@ -47,10 +47,10 @@ const Home = () => {
             );
           })}
         </div>
-        <div className="featured_products">
+        <div className="featured_products mb-5">
           <h2>Featured Products</h2>
           <div className="">
-            <h5 className="text-center mt-4">Best sellers</h5>
+            <h5 className="text-center my-4">Best sellers</h5>
             <ProductsPageGrid></ProductsPageGrid>
           </div>
         </div>
@@ -68,10 +68,9 @@ const Wrapper = styled.section`
       ::before,
       ::after {
         content: "";
-        width: 120px;
+        width: 10%;
         height: 2px;
         top: 1rem;
-        /* left: 2rem; */
         right: var(--h2-pos);
         background-color: var(--clr-p-1);
         position: absolute;

@@ -13,3 +13,5 @@ export const TOGGLE_AMT = "TOGGLE_AMT";
 export const CLEAR_CART = "CLEAR_CART";
 export const GET_TOTAL = "GET_TOTAL";
 export const CHANGE_VIEW = "CHANGE_VIEW";
+export const FILTER = "FILTER";
+export const LOAD_PRODUCTS = "LOAD_PRODUCTS";

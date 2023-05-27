@@ -12,15 +12,12 @@ import {
 import { ImCheckmark } from "react-icons/im";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { singleProductSocials } from "../data";
-import Button from "react-bootstrap/Button";
-import OverlayTrigger from "react-bootstrap/OverlayTrigger";
-import Popover from "react-bootstrap/Popover";
 import { useCartContext } from "../context/CartContext";
 import { toast } from "react-toastify";
 
 const SingleProduct = () => {
+  const [count, setCount] = useState(1);
   const { addItem } = useCartContext();
-
   const { id } = useParams();
   const {
     fetchSingleProduct,
@@ -29,15 +26,16 @@ const SingleProduct = () => {
     single_product,
   } = useProductsProvider();
 
-  useEffect(() => {
-    fetchSingleProduct(id);
-    console.log(single_product);
-  }, [id]);
-
+  const productAdded = () => {
+    toast.success("Added To Cart");
+  };
+  const productLimited = () => {
+    toast.error("max_Limit reached");
+  };
   if (single_product_error) {
     return (
       <Wrapper>
-        <div className="error">
+        <div className="error mt-5">
           <h2>Item not found</h2>
           <Link className="btn btn-solid" to="/products">
             Back To Collections
@@ -47,11 +45,13 @@ const SingleProduct = () => {
     );
   }
 
-  const { name, images, price, stars, description, colors, category } =
+  useEffect(() => {
+    fetchSingleProduct(id);
+  }, [id]);
+  const { name, images, price, stars, description, colors, category, stock } =
     single_product;
   const [mainImg, setMainImg] = useState(images?.[0]?.url);
   const [mainColor, setMainColor] = useState(colors?.[0]);
-  console.log(mainColor);
   useEffect(() => {
     setMainImg(images?.[0]?.url);
     setMainColor(colors?.[0]);
@@ -65,7 +65,7 @@ const SingleProduct = () => {
           <div className="custom-loader"></div>
         ) : (
           <>
-            <div className="img-container">
+            <div className="img-container mb-5">
               <img src={mainImg} alt="main-img" />
               <div className="sub-images">
                 {images?.map(({ id, url }) => {
@@ -80,48 +80,78 @@ const SingleProduct = () => {
               <p>{description}</p>
               <hr />
               <div className="colors">
-                <p>Colors</p>
+                <p>Colors :</p>
                 {colors?.map((color, i) => {
                   return (
-                    <p
+                    <span
                       onClick={() => setMainColor(color)}
                       className={mainColor == color ? "active" : ""}
                       key={i}
                       style={{ background: color }}
                     >
                       {mainColor === color ? <ImCheckmark /> : null}
-                    </p>
+                    </span>
                   );
                 })}
               </div>
               <div className="add_cart">
                 <div className="btns d-flex align-items-center">
                   <button>
-                    <IoMdArrowDropup />
+                    <IoMdArrowDropup
+                      onClick={() => {
+                        setCount((prev) => {
+                          if (prev >= stock) {
+                            productLimited();
+                            return prev;
+                          }
+                          return prev + 1;
+                        });
+                      }}
+                    />
                   </button>
-                  <p>{1}</p>
+                  <p>{count}</p>
                   <button>
-                    <IoMdArrowDropdown />
+                    <IoMdArrowDropdown
+                      onClick={() => {
+                        setCount((prev) => {
+                          if (prev <= 1) {
+                            return 1;
+                          }
+                          return prev - 1;
+                        });
+                      }}
+                    />
                   </button>
                 </div>
-                <button
-                  className="btn btn-solid"
-                  onClick={() => {
-                    toast.success("Added to cart");
-                    addItem({
-                      ...single_product,
-                      amount: 1,
-                      color: mainColor,
-                      id: `${id + mainColor}`,
-                    });
-                  }}
-                >
-                  ADD TO CART
-                </button>
+                {stock <= 0 ? (
+                  <button className="btn btn-solid">OUT OF STOCK</button>
+                ) : (
+                  <button
+                    className="btn btn-solid"
+                    onClick={() => {
+                      addItem(
+                        {
+                          ...single_product,
+                          amount: count,
+                          color: mainColor,
+                          id: `${id + mainColor}`,
+                        },
+                        productLimited,
+                        productAdded
+                      );
+                    }}
+                  >
+                    ADD TO CART
+                  </button>
+                )}
                 <BsFillHeartFill />
               </div>
-              <p className="my-4"> category: {category}</p>
-              <div className="socials d-flex">
+              <p className="my-4 fw-semibold">
+                {" "}
+                category : <span className="fw-normal">{category}</span>
+              </p>
+
+              <div className="socials d-flex mb-5">
                 {singleProductSocials.map(({ Icon, id, url }) => {
                   return (
                     <a href={url} key={id}>
@@ -138,44 +168,29 @@ const SingleProduct = () => {
   );
 };
 
-// const popover = (
-//   <Popover id="popover-basic">
-//     <Popover.Header as="h3">Popover right</Popover.Header>
-//     <Popover.Body>
-//       And here&#39;s some <strong>amazing</strong> content. It&#39;s very
-//       engaging. right?
-//     </Popover.Body>
-//   </Popover>
-// );
-
-// const Example = () => (
-//   <OverlayTrigger trigger="click" placement="right" overlay={popover}>
-//     <Button variant="success">Click me to see</Button>
-//   </OverlayTrigger>
-// );
-
 const Wrapper = styled.section`
   .socials {
     gap: 2rem;
     a {
       cursor: pointer;
+      :hover {
+        color: green;
+      }
     }
   }
   .add_cart {
     display: flex;
     align-items: stretch;
     gap: 1rem;
-    height: 60px;
+    height: 50px;
     .btns {
       gap: 1rem;
       border: 1px solid var(--clr-p-8);
       button {
         svg {
-          font-size: 2.5rem;
+          font-size: 2rem;
         }
       }
-    }
-    button {
     }
     > svg {
       font-size: 1.3rem;
@@ -193,18 +208,20 @@ const Wrapper = styled.section`
     display: flex;
     margin: 2rem 0;
     gap: 1rem;
-    p {
+    span {
       cursor: pointer;
       opacity: 0.5;
       display: block;
-      width: 25px;
-
+      width: 26px;
+      border: 2px solid var(--clr-p-1);
+      padding: 1px;
+      background-clip: content-box !important;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       svg {
-        color: #828282;
+        color: var(--clr-p-11);
       }
     }
     .active {
@@ -223,21 +240,29 @@ const Wrapper = styled.section`
     grid-template-columns: 1fr 1fr;
     gap: 2rem;
   }
-  @media only screen and (max-width: 768px) {
-    > div {
-      grid-template-columns: unset;
-    }
-  }
+
   .img-container {
     display: grid;
     gap: 2rem;
-    height: 900px;
+    /* height: 500px; */
     > img {
-      height: 100%;
+      max-height: 600px;
     }
     .sub-images {
       display: grid;
       grid-template-columns: repeat(5, 1fr);
+      gap: 0.5rem;
+      > img {
+        height: 60px;
+      }
+    }
+  }
+  @media only screen and (max-width: 768px) {
+    > div {
+      grid-template-columns: unset;
+    }
+    .img-container {
+      height: auto;
     }
   }
   .product_description {

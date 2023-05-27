@@ -22,6 +22,9 @@ const Filters = () => {
 };
 
 const Wrapper = styled.div`
+  height: max-content;
+  position: sticky;
+  top: 5rem;
   .search_bar {
     border-radius: 10px;
     padding: 0.5rem 0;

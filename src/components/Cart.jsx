@@ -6,8 +6,19 @@ import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
+import { toast } from "react-toastify";
+
 const Cart = () => {
+  const { total_Amount, total_Price } = useCartContext();
+
   const { cart, removeItem, ToggleCount, clearCart } = useCartContext();
+
+  const productAdded = () => {
+    toast.success("Added To Cart");
+  };
+  const productLimited = () => {
+    toast.error("max_Limit reached");
+  };
   return (
     <Wrapper>
       <Hero page={"cart"}></Hero>
@@ -16,10 +27,10 @@ const Cart = () => {
         <div className="cart">
           <ul className="heading">
             <li>IMAGE</li>
-            <li>PRODUCT NAME</li>
-            <li>UNIT PRICE</li>
+            <li>PRODUCT</li>
+            <li className="d-none d-lg-block">UNIT PRICE</li>
             <li>QTY</li>
-            <li>SUBTOTAL</li>
+            <li className="d-none d-lg-block">SUBTOTAL</li>
             <li>ACTION</li>
           </ul>
 
@@ -32,7 +43,7 @@ const Cart = () => {
             </div>
           ) : (
             cart.map((item) => {
-              console.log(item);
+              // console.log(item);
               const { id, price, images, name, category, amount, color } = item;
               return (
                 <ul key={id}>
@@ -51,17 +62,24 @@ const Cart = () => {
                           }}
                         ></p>
                       </p>
-                      <p>category: {category}</p>
+                      <p className="d-none d-lg-block">category: {category}</p>
+                      <p className="price d-lg-none">
+                        &#x20B9; {price * amount}
+                      </p>
                     </div>
                   </li>
-                  <li>{price}</li>
+                  <li className="d-none d-lg-block">{price}</li>
                   <li>
                     <div>
                       <div className="btns d-flex align-items-center">
                         <button>
                           <IoMdArrowDropup
                             onClick={() => {
-                              ToggleCount({ id, act: "INC" });
+                              ToggleCount(
+                                { id, act: "INC" },
+                                productLimited,
+                                productAdded
+                              );
                             }}
                           />
                         </button>
@@ -69,14 +87,18 @@ const Cart = () => {
                         <button>
                           <IoMdArrowDropdown
                             onClick={() => {
-                              ToggleCount({ id, act: "DEC" });
+                              ToggleCount(
+                                { id, act: "DEC" },
+                                productLimited,
+                                productAdded
+                              );
                             }}
                           />
                         </button>
                       </div>
                     </div>
                   </li>
-                  <li>{price * amount}</li>
+                  <li className="d-none d-lg-block">{price * amount}</li>
                   <li>
                     <ImCross
                       className="remove_btn"
@@ -94,7 +116,7 @@ const Cart = () => {
             <button className="btn rounded-5 px-5">
               <Link to="/products">CONTINUE SHOPPING</Link>
             </button>
-            <button className="btn rounded-5 px-5" onClick={clearCart}>
+            <button className="btn rounded-5 px-5" onClick={() => clearCart()}>
               CLEAR SHOPPING CART
             </button>
           </div>
@@ -161,11 +183,15 @@ const Cart = () => {
               <Card.Text>
                 <span className="d-flex justify-content-between mt-2">
                   <p>Total Products : </p>
-                  <p className="total">{22}</p>
+                  <p className="total text-light bg-primary px-2 rounded-5">
+                    {total_Amount}
+                  </p>
                 </span>
                 <span className="d-flex justify-content-between my-4">
                   <p>Grand Total : </p>
-                  <p className="total">{123}</p>
+                  <p className="total text-success fw-semibold">
+                    {total_Price}
+                  </p>
                 </span>
               </Card.Text>
               <Button
@@ -241,6 +267,7 @@ const Wrapper = styled.section`
     background-color: var(--clr-p-9);
     height: 50px;
   }
+
   ul {
     display: grid;
     list-style: none;
@@ -283,6 +310,22 @@ const Wrapper = styled.section`
         height: 30px;
         svg {
           font-size: 1.3rem;
+        }
+      }
+    }
+  }
+  @media only screen and (max-width: 992px) {
+    ul {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      img {
+        width: 70px;
+        height: 100px;
+      }
+      .color {
+        p {
+          height: 20px;
+          width: 20px;
         }
       }
     }

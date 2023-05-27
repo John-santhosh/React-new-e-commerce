@@ -19,6 +19,9 @@ const Wrapper = styled.span`
   color: var(--clr-p-1);
   font-weight: 700;
   font-size: 1.4rem;
+  @media only screen and (max-width: 600px) {
+    font-size: 1rem;
+  }
   text-transform: capitalize;
   a {
     /* transition: var(--transition); */

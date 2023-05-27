@@ -12,6 +12,11 @@ import {
   GET_SINGLE_PRODUCTS_SUCCESS,
   GET_SINGLE_PRODUCTS_ERROR,
 } from "../actions";
+import Airtable from "airtable";
+
+const airTable = new Airtable({ apiKey: import.meta.env.VITE_TABLE_KEY }).base(
+  "appIG2HRBqmIWjjXg"
+);
 const ProductsContext = ({ children }) => {
   const initialState = {
     products_error: false,
@@ -23,31 +28,62 @@ const ProductsContext = ({ children }) => {
     single_product: {},
   };
   const [state, dispatch] = useReducer(reducer, initialState);
-  const fetchProducts = async () => {
+  const fetchProducts = () => {
     dispatch({ type: GET_PRODUCTS_BEGIN });
-    try {
-      const { data } = await axios.get(productsURL);
-      dispatch({ type: GET_PRODUCTS_SUCCESS, payload: data });
-    } catch (error) {
-      dispatch({ type: GET_PRODUCTS_ERROR });
-      console.log(error);
-    }
-  };
+    console.log("products begin");
+    airTable("data")
+      .select({
+        view: "Grid view",
+      })
+      .eachPage(
+        (records, fetchNextPage) => {
+          const products = records.map((record) => {
+            return {
+              ...record.fields,
+              image: record.fields.images[0].url,
+              id: record.id,
+            };
+          });
+          console.log(products);
+          dispatch({ type: GET_PRODUCTS_SUCCESS, payload: products });
 
-  const fetchSingleProduct = async (id) => {
-    dispatch({ type: GET_SINGLE_PRODUCTS_BEGIN });
-    try {
-      const { data } = await axios.get(`${singleProductURL}${id}`);
-      dispatch({ type: GET_SINGLE_PRODUCTS_SUCCESS, payload: data });
-    } catch (error) {
-      dispatch({ type: GET_SINGLE_PRODUCTS_ERROR });
-      console.log(error);
-    }
+          // To fetch the next page of records, call `fetchNextPage`.
+          // If there are more records, `page` will get called again.
+          // If there are no more records, `done` will get called.
+          fetchNextPage();
+        },
+        function done(err) {
+          if (err) {
+            console.error(err);
+            dispatch({ type: GET_PRODUCTS_ERROR });
+            return;
+          }
+        }
+      );
   };
 
   useEffect(() => {
     fetchProducts();
   }, []);
+
+  const fetchSingleProduct = (id) => {
+    dispatch({ type: GET_SINGLE_PRODUCTS_BEGIN });
+    console.log("single product begin");
+    airTable("data").find(id, function (err, record) {
+      if (err) {
+        console.error(err);
+        dispatch({ type: GET_SINGLE_PRODUCTS_ERROR });
+        return;
+      }
+      console.log("Retrieved", record.id);
+      console.log(record);
+      dispatch({
+        type: GET_SINGLE_PRODUCTS_SUCCESS,
+        payload: { ...record.fields },
+      });
+    });
+  };
+
   return (
     <ProductsProvider.Provider value={{ ...state, fetchSingleProduct }}>
       {children}

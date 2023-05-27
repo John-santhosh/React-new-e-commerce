@@ -38,6 +38,11 @@
   --h2-pos: 9rem;
 }
 
+@media only screen and (max-width: 768px) {
+  :root {
+    --h2-pos: 0;
+  }
+}
 body {
 }
 
@@ -46,7 +51,7 @@ html {
 }
 ::-webkit-scrollbar {
   width: 8px;
-  display: none;
+  /* display: none; */
 }
 ::-webkit-scrollbar-thumb {
   border-radius: 20px;

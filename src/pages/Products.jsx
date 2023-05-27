@@ -8,8 +8,11 @@ import { useFilterContext } from "../context/FilterContext";
 import { viewToggleButtons } from "../data";
 import { ImSearch } from "react-icons/im";
 import Filters from "../components/Filters";
+import { useProductsProvider } from "../context/ProductsContext";
 const Products = () => {
   const { gridView, gridView_2, listView, changeView } = useFilterContext();
+  const { products_error } = useProductsProvider();
+  const { filterProducts } = useFilterContext();
   return (
     <Wrapper>
       <Hero page={"products"}></Hero>
@@ -18,10 +21,17 @@ const Products = () => {
         <div className="products">
           <div className="sorting">
             <div className="price_sorting d-flex">
-              <select name="sort" id="sort">
+              <select
+                name="sort"
+                id="sort"
+                onChange={(e) => {
+                  filterProducts(e.target.value);
+                  // console.log(e.target.value);
+                }}
+              >
                 <option value="default">None</option>
-                <option value="ascending">Low to High</option>
-                <option value="descending">High to Low</option>
+                <option value="ASCENDING">Low to High</option>
+                <option value="DESCENDING">High to Low</option>
               </select>
               <p>
                 showing {15} of {22} results
@@ -37,9 +47,15 @@ const Products = () => {
               })}
             </div>
           </div>
-          {gridView && <GridProducts></GridProducts>}
-          {gridView_2 && <GridProducts2></GridProducts2>}
-          {listView && <ListProducts></ListProducts>}
+          {products_error ? (
+            <div>
+              <h3 className="text-center my-4">There was an error Loading</h3>
+            </div>
+          ) : (
+            (gridView && <GridProducts></GridProducts>) ||
+            (gridView_2 && <GridProducts2></GridProducts2>) ||
+            (listView && <ListProducts></ListProducts>)
+          )}
         </div>
       </div>
     </Wrapper>
@@ -57,8 +73,19 @@ const Wrapper = styled.section`
     .section-center {
       grid-template-columns: unset;
     }
+    .filters {
+      grid-row: 2/3;
+    }
   }
-
+  @media only screen and (min-width: 992px) {
+    .sorting {
+      height: max-content;
+      position: sticky;
+      top: 5rem;
+      background-color: var(--clr-p-11);
+      z-index: 99;
+    }
+  }
   .sorting,
   .price_sorting {
     display: flex;
