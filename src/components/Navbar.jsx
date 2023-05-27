@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
 import Sidebar from "./sidebar";
@@ -13,8 +13,10 @@ import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
 import { useGlobalContext } from "../context/Context";
+import { useCartContext } from "../context/CartContext";
 
 const Navbar = () => {
+  const { total_Amount } = useCartContext();
   const { openSidebar } = useGlobalContext();
   return (
     <Wrapper className="d-grid">
@@ -88,10 +90,12 @@ const Navbar = () => {
             </button>
           </li>
           <li>
-            <button>
-              <CgShoppingBag />
-              <span>{1}</span>
-            </button>
+            <Link to="/cart">
+              <button>
+                <CgShoppingBag />
+                <span>{total_Amount}</span>
+              </button>
+            </Link>
           </li>
           <li>
             <button className="d-block d-lg-none">

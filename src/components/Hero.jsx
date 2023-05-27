@@ -11,7 +11,7 @@ const Hero = ({ page, extra }) => {
   );
 };
 
-const Wrapper = styled.div`
+const Wrapper = styled.span`
   background-color: var(--clr-p-9);
   text-align: center;
   height: 7rem;

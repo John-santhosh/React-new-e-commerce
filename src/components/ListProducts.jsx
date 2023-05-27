@@ -107,41 +107,36 @@ const Wrapper = styled.div`
       object-fit: cover;
     }
   }
-  .custom-loader {
-    width: 80px;
-    height: 80px;
-    display: grid;
-    color: var(--clr-p-3);
-    -webkit-mask: radial-gradient(circle 5px, #0000 90%, #000);
-    animation: sh3 1.5s infinite linear;
-  }
-  .custom-loader:before,
-  .custom-loader:after {
-    content: "";
-    grid-area: 1/1;
-    background: radial-gradient(
-          farthest-side at bottom left,
-          currentColor 94%,
-          #0000
-        )
-        top left,
-      radial-gradient(farthest-side at top right, currentColor 94%, #0000)
-        bottom right;
-    background-size: 63% 50%;
-    background-repeat: no-repeat;
-    -webkit-mask: radial-gradient(65% 110% at bottom left, #0000 94%, #000) top
-        left,
-      radial-gradient(65% 110% at top right, #0000 94%, #000) bottom right;
-    -webkit-mask-size: 62% 50%;
-    -webkit-mask-repeat: no-repeat;
-  }
-  .custom-loader:after {
-    transform: rotate(90deg);
-  }
 
-  @keyframes sh3 {
+  /* loader */
+  .custom-loader {
+    --r1: 154%;
+    --r2: 68.5%;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: radial-gradient(
+        var(--r1) var(--r2) at top,
+        #0000 79.5%,
+        #766df4 80%
+      ),
+      radial-gradient(var(--r1) var(--r2) at bottom, #766df4 79.5%, #0000 80%),
+      radial-gradient(var(--r1) var(--r2) at top, #0000 79.5%, #766df4 80%),
+      #e4e4ed;
+    background-size: 50.5% 220%;
+    background-position: -100% 0%, 0% 0%, 100% 0%;
+    background-repeat: no-repeat;
+    animation: p9 2s infinite linear;
+  }
+  @keyframes p9 {
+    33% {
+      background-position: 0% 33%, 100% 33%, 200% 33%;
+    }
+    66% {
+      background-position: -100% 66%, 0% 66%, 100% 66%;
+    }
     100% {
-      transform: rotate(1turn);
+      background-position: 0% 100%, 100% 100%, 200% 100%;
     }
   }
 

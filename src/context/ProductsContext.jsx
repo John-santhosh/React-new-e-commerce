@@ -24,7 +24,7 @@ const ProductsContext = ({ children }) => {
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const fetchProducts = async () => {
-    // dispatch({ type: GET_PRODUCTS_BEGIN });
+    dispatch({ type: GET_PRODUCTS_BEGIN });
     try {
       const { data } = await axios.get(productsURL);
       dispatch({ type: GET_PRODUCTS_SUCCESS, payload: data });

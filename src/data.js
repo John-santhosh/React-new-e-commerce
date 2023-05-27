@@ -3,7 +3,29 @@ import { FiTruck } from "react-icons/fi";
 import { TbDiscount2 } from "react-icons/tb";
 import { SiMoneygram } from "react-icons/si";
 import { RiMoneyDollarCircleLine } from "react-icons/ri";
+import {
+  FaFacebookF,
+  FaPinterestP,
+  FaTwitter,
+  FaLinkedinIn,
+  FaDribbble,
+} from "react-icons/fa";
 
+import { BsFillGridFill, BsGrid3X3GapFill, BsListUl } from "react-icons/bs";
+
+export const singleProductSocials = [
+  { id: nanoid(), Icon: FaFacebookF, url: "www/facebook.com" },
+  { id: nanoid(), Icon: FaDribbble, url: "www/facebook.com" },
+  { id: nanoid(), Icon: FaPinterestP, url: "www/facebook.com" },
+  { id: nanoid(), Icon: FaTwitter, url: "www/facebook.com" },
+  { id: nanoid(), Icon: FaLinkedinIn, url: "www/facebook.com" },
+];
+
+export const viewToggleButtons = [
+  { id: nanoid(), Icon: BsGrid3X3GapFill, view: "GRID" },
+  { id: nanoid(), Icon: BsFillGridFill, view: "GRID2" },
+  { id: nanoid(), Icon: BsListUl, view: "LIST" },
+];
 export const homeService = [
   {
     id: nanoid(),

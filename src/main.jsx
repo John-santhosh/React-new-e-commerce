@@ -5,11 +5,17 @@ import "./index.css";
 import AppContext from "./context/Context.jsx";
 import "animate.css";
 import ProductsContext from "./context/ProductsContext.jsx";
+import CartContext from "./context/CartContext.jsx";
+import FilterContext from "./context/FilterContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <ProductsContext>
-    <AppContext>
-      <App />
-    </AppContext>
-  </ProductsContext>
+  <CartContext>
+    <ProductsContext>
+      <FilterContext>
+        <AppContext>
+          <App />
+        </AppContext>
+      </FilterContext>
+    </ProductsContext>
+  </CartContext>
 );

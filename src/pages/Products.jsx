@@ -4,12 +4,17 @@ import { BsFillGridFill, BsGrid3X3GapFill, BsListUl } from "react-icons/bs";
 import GridProducts from "../components/GridProducts";
 import GridProducts2 from "../components/GridProducts2";
 import ListProducts from "../components/ListProducts";
+import { useFilterContext } from "../context/FilterContext";
+import { viewToggleButtons } from "../data";
+import { ImSearch } from "react-icons/im";
+import Filters from "../components/Filters";
 const Products = () => {
+  const { gridView, gridView_2, listView, changeView } = useFilterContext();
   return (
     <Wrapper>
       <Hero page={"products"}></Hero>
       <div className="section-center">
-        <div className="filters">filters</div>
+        <Filters></Filters>
         <div className="products">
           <div className="sorting">
             <div className="price_sorting d-flex">
@@ -23,20 +28,18 @@ const Products = () => {
               </p>
             </div>
             <div className="view">
-              <button>
-                <BsFillGridFill />
-              </button>
-              <button>
-                <BsGrid3X3GapFill />
-              </button>
-              <button>
-                <BsListUl />
-              </button>
+              {viewToggleButtons.map((item) => {
+                return (
+                  <button onClick={() => changeView(item.view)} key={item.id}>
+                    <item.Icon />
+                  </button>
+                );
+              })}
             </div>
           </div>
-          {/* <GridProducts></GridProducts> */}
-          {/* <GridProducts2></GridProducts2> */}
-          <ListProducts></ListProducts>
+          {gridView && <GridProducts></GridProducts>}
+          {gridView_2 && <GridProducts2></GridProducts2>}
+          {listView && <ListProducts></ListProducts>}
         </div>
       </div>
     </Wrapper>

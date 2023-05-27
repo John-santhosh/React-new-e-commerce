@@ -64,7 +64,9 @@ h6 {
 a {
   color: inherit;
 }
-
+a:hover {
+  color: inherit;
+}
 .section-center {
   width: clamp(300px, 90%, 1300px);
   margin: auto;
@@ -101,11 +103,13 @@ button {
   background-color: var(--clr-s-1);
   color: var(--clr-s-5);
   text-transform: capitalize;
+  border: 1px solid var(--clr-s-1);
 }
 
 .btn:hover {
   background-color: var(--clr-s-1);
   color: var(--clr-s-5);
+  border: 1px solid var(--clr-s-1);
 }
 
 .btn-solid:hover {
@@ -120,4 +124,8 @@ button {
 
 .d-flex {
   display: flex;
+}
+
+p {
+  margin: 0;
 }
