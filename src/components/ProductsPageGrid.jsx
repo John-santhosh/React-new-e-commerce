@@ -62,8 +62,6 @@ const Wrapper = styled.div`
   gap: 1rem;
   grid-template-columns: repeat(3, 1fr);
   min-height: 250px;
-  place-items: center;
-  justify-items: stretch;
   text-align: center;
 
   @media only screen and (min-width: 1350px) {

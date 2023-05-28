@@ -12,7 +12,7 @@ import { useProductsProvider } from "../context/ProductsContext";
 const Products = () => {
   const { gridView, gridView_2, listView, changeView } = useFilterContext();
   const { products_error } = useProductsProvider();
-  const { filterProducts } = useFilterContext();
+  const { changeSort, filtered_product, all_products } = useFilterContext();
   return (
     <Wrapper>
       <Hero page={"products"}></Hero>
@@ -25,8 +25,7 @@ const Products = () => {
                 name="sort"
                 id="sort"
                 onChange={(e) => {
-                  filterProducts(e.target.value);
-                  // console.log(e.target.value);
+                  changeSort(e.target.value);
                 }}
               >
                 <option value="default">None</option>
@@ -34,7 +33,8 @@ const Products = () => {
                 <option value="DESCENDING">High to Low</option>
               </select>
               <p>
-                showing {15} of {22} results
+                showing {filtered_product.length} of {all_products.length}
+                results
               </p>
             </div>
             <div className="view">
@@ -52,9 +52,15 @@ const Products = () => {
               <h3 className="text-center my-4">There was an error Loading</h3>
             </div>
           ) : (
-            (gridView && <GridProducts></GridProducts>) ||
-            (gridView_2 && <GridProducts2></GridProducts2>) ||
-            (listView && <ListProducts></ListProducts>)
+            (gridView && (
+              <GridProducts products={filtered_product}></GridProducts>
+            )) ||
+            (gridView_2 && (
+              <GridProducts2 products={filtered_product}></GridProducts2>
+            )) ||
+            (listView && (
+              <ListProducts products={filtered_product}></ListProducts>
+            ))
           )}
         </div>
       </div>

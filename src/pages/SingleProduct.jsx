@@ -50,10 +50,9 @@ const SingleProduct = () => {
   }, [id]);
   const { name, images, price, stars, description, colors, category, stock } =
     single_product;
-  const [mainImg, setMainImg] = useState(images?.[0]?.url);
+  const [mainImg, setMainImg] = useState(0);
   const [mainColor, setMainColor] = useState(colors?.[0]);
   useEffect(() => {
-    setMainImg(images?.[0]?.url);
     setMainColor(colors?.[0]);
   }, [images]);
 
@@ -66,10 +65,20 @@ const SingleProduct = () => {
         ) : (
           <>
             <div className="img-container mb-5">
-              <img src={mainImg} alt="main-img" />
+              <img src={images?.[mainImg]?.url} alt="main-img" />
               <div className="sub-images">
-                {images?.map(({ id, url }) => {
-                  return <img key={id} src={url} alt="sub images" />;
+                {images?.map(({ id, url }, ind) => {
+                  return (
+                    <img
+                      className={mainImg === ind ? "activeImg" : null}
+                      onClick={() => {
+                        setMainImg(ind);
+                      }}
+                      key={id}
+                      src={url}
+                      alt="sub images"
+                    />
+                  );
                 })}
               </div>
             </div>
@@ -135,6 +144,7 @@ const SingleProduct = () => {
                           amount: count,
                           color: mainColor,
                           id: `${id + mainColor}`,
+                          image: images[mainImg].url,
                         },
                         productLimited,
                         productAdded
@@ -254,6 +264,13 @@ const Wrapper = styled.section`
       gap: 0.5rem;
       > img {
         height: 60px;
+        cursor: pointer;
+        opacity: 0.6;
+        object-fit: contain;
+        /* object-position: top; */
+      }
+      .activeImg {
+        opacity: 1;
       }
     }
   }

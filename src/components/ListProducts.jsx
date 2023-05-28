@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useProductsProvider } from "../context/ProductsContext";
 import { Link } from "react-router-dom";
 import { AiOutlineHeart, AiTwotoneHeart } from "react-icons/ai";
-const ListProducts = () => {
-  const { products_loading, products } = useProductsProvider();
+const ListProducts = ({ products }) => {
+  const { products_loading } = useProductsProvider();
   return (
     <Wrapper className="products">
       {products_loading ? (

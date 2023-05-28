@@ -50,7 +50,7 @@ const reducer = (state, { type, payload, functions }) => {
     if (act === "INC") {
       const newItems = state.cart.map((item) => {
         if (item.id === id) {
-          if (item.stock >= item.amount) {
+          if (item.amount >= item.stock) {
             productLimited();
             return { ...item, amount: item.stock };
           }
@@ -74,7 +74,7 @@ const reducer = (state, { type, payload, functions }) => {
     const result = state.cart.reduce(
       (prev, curr) => {
         const amount = prev.amount + curr.amount;
-        const price = prev.price + curr.price;
+        const price = curr.amount * curr.price + prev.price;
         return { amount, price };
       },
       { amount: 0, price: 0 }

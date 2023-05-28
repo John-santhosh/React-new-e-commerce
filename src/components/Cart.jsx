@@ -44,11 +44,11 @@ const Cart = () => {
           ) : (
             cart.map((item) => {
               // console.log(item);
-              const { id, price, images, name, category, amount, color } = item;
+              const { id, price, image, name, category, amount, color } = item;
               return (
                 <ul key={id}>
                   <li>
-                    <img src={images?.[0]?.url} alt={name} />
+                    <img src={image} alt={name} />
                   </li>
                   <li>
                     <div>

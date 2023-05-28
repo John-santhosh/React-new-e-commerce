@@ -2,8 +2,8 @@ import styled from "styled-components";
 import { useProductsProvider } from "../context/ProductsContext";
 import { Link } from "react-router-dom";
 import { AiOutlineHeart, AiFillEye } from "react-icons/ai";
-const GridProducts = () => {
-  const { products_loading, products } = useProductsProvider();
+const GridProducts = ({ products }) => {
+  const { products_loading } = useProductsProvider();
   return (
     <Wrapper className="products">
       {products_loading ? (
@@ -54,8 +54,6 @@ const Wrapper = styled.div`
   gap: 1rem;
   grid-template-columns: repeat(3, 1fr);
   min-height: 250px;
-  place-items: center;
-  justify-items: stretch;
   text-align: center;
 
   @media only screen and (max-width: 900px) {
@@ -78,6 +76,7 @@ const Wrapper = styled.div`
     margin-bottom: 1rem;
     img {
       width: 100%;
+      height: 100%;
       object-fit: cover;
     }
     > div {

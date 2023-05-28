@@ -44,7 +44,6 @@ const ProductsContext = ({ children }) => {
               id: record.id,
             };
           });
-          console.log(products);
           dispatch({ type: GET_PRODUCTS_SUCCESS, payload: products });
 
           // To fetch the next page of records, call `fetchNextPage`.
@@ -75,8 +74,7 @@ const ProductsContext = ({ children }) => {
         dispatch({ type: GET_SINGLE_PRODUCTS_ERROR });
         return;
       }
-      console.log("Retrieved", record.id);
-      console.log(record);
+
       dispatch({
         type: GET_SINGLE_PRODUCTS_SUCCESS,
         payload: { ...record.fields },
