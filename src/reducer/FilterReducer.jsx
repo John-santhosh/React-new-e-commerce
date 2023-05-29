@@ -3,6 +3,7 @@ import {
   CHANGE_VIEW,
   CLEAR_FILTERS,
   FILTER,
+  FILTER_CATEGORY,
   LOAD_PRODUCTS,
 } from "../actions";
 
@@ -46,20 +47,17 @@ const reducer = (state, { type, payload, categories }) => {
       const newRes = products.sort((prev, curr) => {
         return curr.price - prev.price;
       });
-      // console.log(newRes);
-      return { ...state, filtered_product: newRes };
+      return { ...state, sort: "DESCENDING", filtered_product: newRes };
     }
     if (payload === "ASCENDING") {
       const newRes = products.sort((prev, curr) => {
         return prev.price - curr.price;
       });
-      // console.log(newRes);
-      return { ...state, filtered_product: newRes };
+      return { ...state, sort: "ASCENDING", filtered_product: newRes };
     }
     if (payload === "default") {
-      return { ...state, filtered_product: products };
+      return { ...state, sort: "default", filtered_product: products };
     }
-    console.log(payload);
     return state;
   }
 
@@ -68,6 +66,7 @@ const reducer = (state, { type, payload, categories }) => {
     return {
       ...state,
       filtered_product: payload,
+      sort: "default",
       filters: {
         ...state.filters,
         text: "",
@@ -146,21 +145,6 @@ const reducer = (state, { type, payload, categories }) => {
     }
 
     if (name === "categories") {
-      console.log(value);
-      // // console.log(state.filters.categories[value]);
-      // console.log(state);
-      // console.log(isChecked);
-      const newRes = products.filter((product) => {
-        // console.log(state.filters.categories);
-        // console.log(product.category);
-        console.log(state.filters.categories[product.category]);
-        // console.log(product);
-        return product.categories;
-      });
-      // console.log();
-
-      // console.log(newRes);
-      // console.log(products);
       return {
         ...state,
         filters: {
@@ -173,6 +157,66 @@ const reducer = (state, { type, payload, categories }) => {
       };
       // return state;
     }
+  }
+
+  if (type === FILTER_CATEGORY) {
+    const { name, value, isChecked } = payload;
+    const products = [...state.all_products];
+
+    let tempFilter;
+    let allFalse = false;
+
+    // console.log(state.filters.categories);
+
+    const newRes = products.filter((item) => {
+      if (state.filters.categories["all"] === true) {
+        return products;
+      }
+      if (state.filters.categories[item.category]) {
+        return state.filters.categories[item.category];
+      }
+    });
+
+    tempFilter = {
+      ...state,
+      filtered_product: newRes,
+    };
+
+    console.log(tempFilter);
+    // if (state.filters.categories["all"] === true) {
+    //   console.log(true);
+    //   return {
+    //     ...state,
+    //     filtered_product: products,
+    //     filters: {
+    //       ...state.filters,
+    //       categories: {
+    //         all: true,
+    //         shoes: false,
+    //         "t-shirt": false,
+    //         cosmetics: false,
+    //         watches: false,
+    //       },
+    //     },
+    //   };
+    // }
+
+    allFalse = Object.values(state.filters.categories).some((item) => item);
+
+    if (allFalse === false) {
+      return {
+        ...state,
+        filtered_product: products,
+        filters: {
+          ...state.filters,
+          categories: {
+            ...state.filters.categories,
+            all: true,
+          },
+        },
+      };
+    }
+    return tempFilter;
   }
   // return state;
   throw new Error(`no ${type} is specified`);

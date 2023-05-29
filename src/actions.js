@@ -17,3 +17,4 @@ export const CHANGE_VIEW = "CHANGE_VIEW";
 export const CHANGE_SORT = "CHANGE_SORT";
 export const LOAD_PRODUCTS = "LOAD_PRODUCTS";
 export const CLEAR_FILTERS = "CLEAR_FILTERS";
+export const FILTER_CATEGORY = "FILTER_CATEGORY";

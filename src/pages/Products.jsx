@@ -12,7 +12,8 @@ import { useProductsProvider } from "../context/ProductsContext";
 const Products = () => {
   const { gridView, gridView_2, listView, changeView } = useFilterContext();
   const { products_error } = useProductsProvider();
-  const { changeSort, filtered_product, all_products } = useFilterContext();
+  const { changeSort, filtered_product, all_products, sort } =
+    useFilterContext();
   return (
     <Wrapper>
       <Hero page={"products"}></Hero>
@@ -28,9 +29,15 @@ const Products = () => {
                   changeSort(e.target.value);
                 }}
               >
-                <option value="default">None</option>
-                <option value="ASCENDING">Low to High</option>
-                <option value="DESCENDING">High to Low</option>
+                <option selected={sort === "default"} value="default">
+                  None
+                </option>
+                <option selected={sort === "ASCENDING"} value="ASCENDING">
+                  Low to High
+                </option>
+                <option selected={sort === "DESCENDING"} value="DESCENDING">
+                  High to Low
+                </option>
               </select>
               <p>
                 showing {filtered_product.length} of {all_products.length}

@@ -5,6 +5,7 @@ import {
   CHANGE_VIEW,
   CLEAR_FILTERS,
   FILTER,
+  FILTER_CATEGORY,
   LOAD_PRODUCTS,
 } from "../actions";
 import { useProductsProvider } from "./ProductsContext";
@@ -19,6 +20,7 @@ const FilterContext = ({ children }) => {
     gridView_2: false,
     listView: false,
     filtered_product: [],
+    sort: "default",
     filters: {
       text: "",
       categories: {},
@@ -37,7 +39,7 @@ const FilterContext = ({ children }) => {
       (prev, curr) => {
         return { ...prev, [curr]: false };
       },
-      { all: false }
+      { all: true }
     );
     dispatch({
       type: LOAD_PRODUCTS,
@@ -56,15 +58,18 @@ const FilterContext = ({ children }) => {
   };
 
   const updateFilter = (e) => {
-    let name = e.target.name;
-    let value = e.target.value;
+    let name = e.currentTarget.name;
+    let value = e.currentTarget.value;
     let isChecked;
     if (name === "colors") {
       value = e.target.dataset.color;
     }
     if (name === "categories") {
-      value = e.target.value;
-      isChecked = e.target.checked;
+      value = e.currentTarget.value;
+      isChecked = e.currentTarget.checked;
+      dispatch({ type: FILTER, payload: { name, value, isChecked } });
+      dispatch({ type: FILTER_CATEGORY, payload: { name, value, isChecked } });
+      return;
     }
     dispatch({ type: FILTER, payload: { name, value, isChecked } });
   };
