@@ -8,7 +8,6 @@ import {
 import { auth, provider } from "../config/Config";
 import {
   GoogleAuthProvider,
-  getRedirectResult,
   onAuthStateChanged,
   signInWithPopup,
   signInWithRedirect,

@@ -31,7 +31,9 @@ const Login = () => {
         toast.success("login successful");
       })
       .catch((error) => {
-        console.log(error.code);
+        // console.log(error.code);
+        let err = error.code;
+        toast.error(`${err.slice(5)}`);
       });
   };
 

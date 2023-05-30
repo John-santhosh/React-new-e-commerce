@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "CI= vite build",
     "lint": "eslint src --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
@@ -15,7 +15,6 @@
     "axios": "^1.4.0",
     "bootstrap": "^5.2.3",
     "firebase": "^9.22.1",
-    "mdb-react-ui-kit": "^6.0.0",
     "nanoid": "^4.0.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
