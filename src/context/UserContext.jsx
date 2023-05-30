@@ -8,8 +8,10 @@ import {
 import { auth, provider } from "../config/Config";
 import {
   GoogleAuthProvider,
+  getRedirectResult,
   onAuthStateChanged,
   signInWithPopup,
+  signInWithRedirect,
 } from "firebase/auth";
 import { toast } from "react-toastify";
 const UserContext = createContext();
@@ -23,6 +25,15 @@ const initialState = {
 
 const UserContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  // current user
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        createUser(user.displayName);
+      }
+    });
+  }, []);
 
   // create new user
   const createUser = (user) => {
@@ -46,7 +57,7 @@ const UserContextProvider = ({ children }) => {
   const googleSignUp = () => {
     // signInWithRedirect(auth, provider);
 
-    signInWithPopup(auth, provider)
+    signInWithRedirect(auth, provider)
       .then((result) => {
         // This gives you a Google Access Token. You can use it to access the Google API.
         const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -70,14 +81,6 @@ const UserContextProvider = ({ children }) => {
       });
   };
 
-  // current user
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        createUser(user.displayName);
-      }
-    });
-  }, []);
   return (
     <UserContext.Provider
       value={{ ...state, loginUser, createUser, signOut, googleSignUp }}

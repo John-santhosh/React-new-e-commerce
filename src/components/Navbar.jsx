@@ -30,7 +30,9 @@ const Navbar = () => {
       <Sidebar></Sidebar>
       <div className="section-center d-flex align-items-center ">
         <div className="logo  ">
-          <img src={logo} alt="logo" />
+          <Link to="/">
+            <img src={logo} alt="logo" />
+          </Link>
         </div>
         <ol className="nav-links d-flex d-none d-lg-flex">
           <li>
