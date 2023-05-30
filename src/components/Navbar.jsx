@@ -1,7 +1,7 @@
 import { Link, NavLink } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../assets/logo.svg";
-import Sidebar from "./sidebar";
+import Sidebar from "./Sidebar";
 
 import { HiMenu } from "react-icons/hi";
 import { CgShoppingBag } from "react-icons/cg";
@@ -16,7 +16,6 @@ import { useGlobalContext } from "../context/Context";
 import { useCartContext } from "../context/CartContext";
 import { useUserContext } from "../context/UserContext";
 
-import Button from "react-bootstrap/Button";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { useProductsProvider } from "../context/ProductsContext";
