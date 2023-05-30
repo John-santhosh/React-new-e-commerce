@@ -1,9 +1,9 @@
 import styled from "styled-components";
 import { useProductsProvider } from "../context/ProductsContext";
 import { Link } from "react-router-dom";
-import { AiOutlineHeart, AiFillEye } from "react-icons/ai";
+import { AiOutlineHeart, AiFillEye, AiTwotoneHeart } from "react-icons/ai";
 const GridProducts2 = ({ products }) => {
-  const { products_loading } = useProductsProvider();
+  const { products_loading, likeProduct } = useProductsProvider();
 
   return (
     <Wrapper className="products">
@@ -12,7 +12,7 @@ const GridProducts2 = ({ products }) => {
       ) : (
         products?.map((product) => {
           // console.log(product);
-          const { name, image, id, price } = product;
+          const { name, image, id, price, wishlisted } = product;
           return (
             <div
               key={id}
@@ -31,8 +31,12 @@ const GridProducts2 = ({ products }) => {
                   <img src={image} alt={name} />
                 </Link>
                 <div className="info">
-                  <button className="btn">
-                    <AiOutlineHeart />
+                  <button className="btn" onClick={() => likeProduct(id)}>
+                    {wishlisted ? (
+                      <AiTwotoneHeart className="liked" />
+                    ) : (
+                      <AiOutlineHeart />
+                    )}
                   </button>
                   <Link to={`/products/${id}`}>Buy Now</Link>
                   <button className="btn">

@@ -35,7 +35,7 @@ const reducer = (state, { type, payload, functions }) => {
     const { id, act } = payload;
     const { productLimited } = functions;
     if (act === "DEC") {
-      console.log("dec");
+      // console.log("dec");
       const newItems = state.cart.map((item) => {
         if (item.id === id) {
           if (item.amount === 1) {

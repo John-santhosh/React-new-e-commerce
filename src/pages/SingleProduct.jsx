@@ -14,6 +14,7 @@ import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { singleProductSocials } from "../data";
 import { useCartContext } from "../context/CartContext";
 import { toast } from "react-toastify";
+import { AiOutlineHeart, AiTwotoneHeart } from "react-icons/ai";
 
 const SingleProduct = () => {
   const [count, setCount] = useState(1);
@@ -24,7 +25,9 @@ const SingleProduct = () => {
     single_product_loading,
     single_product_error,
     single_product,
+    products,
   } = useProductsProvider();
+  const { likeProduct } = useProductsProvider();
 
   const productAdded = () => {
     toast.success("Added To Cart");
@@ -48,8 +51,21 @@ const SingleProduct = () => {
   useEffect(() => {
     fetchSingleProduct(id);
   }, [id]);
-  const { name, images, price, stars, description, colors, category, stock } =
-    single_product;
+  const {
+    name,
+    images,
+    price,
+    stars,
+    description,
+    colors,
+    category,
+    stock,
+    id: itemId,
+  } = single_product;
+  const wishlisted = products?.find((item) => {
+    return item.id === itemId;
+  })?.wishlisted;
+
   const [mainImg, setMainImg] = useState(0);
   const [mainColor, setMainColor] = useState(colors?.[0]);
   useEffect(() => {
@@ -154,7 +170,16 @@ const SingleProduct = () => {
                     ADD TO CART
                   </button>
                 )}
-                <BsFillHeartFill />
+                <button
+                  className="ms-2 fs-4"
+                  onClick={() => likeProduct(itemId)}
+                >
+                  {wishlisted ? (
+                    <AiTwotoneHeart className="liked" />
+                  ) : (
+                    <AiOutlineHeart />
+                  )}
+                </button>
               </div>
               <p className="my-4 fw-semibold">
                 {" "}
@@ -179,6 +204,10 @@ const SingleProduct = () => {
 };
 
 const Wrapper = styled.section`
+  .liked {
+    color: red;
+    filter: drop-shadow(0 0 10px red);
+  }
   .socials {
     gap: 2rem;
     a {

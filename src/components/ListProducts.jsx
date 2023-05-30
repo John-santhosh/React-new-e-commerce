@@ -3,14 +3,14 @@ import { useProductsProvider } from "../context/ProductsContext";
 import { Link } from "react-router-dom";
 import { AiOutlineHeart, AiTwotoneHeart } from "react-icons/ai";
 const ListProducts = ({ products }) => {
-  const { products_loading } = useProductsProvider();
+  const { products_loading, likeProduct } = useProductsProvider();
   return (
     <Wrapper className="products">
       {products_loading ? (
         <div className="custom-loader"></div>
       ) : (
         products?.map((product) => {
-          const { name, image, id, price, description } = product;
+          const { name, image, id, price, description, wishlisted } = product;
           return (
             <div key={id} className="product">
               <div className="image-container">
@@ -29,8 +29,12 @@ const ListProducts = ({ products }) => {
                       Buy Now
                     </Link>
                   </button>
-                  <button className="">
-                    <AiTwotoneHeart />
+                  <button className="" onClick={() => likeProduct(id)}>
+                    {wishlisted ? (
+                      <AiTwotoneHeart className="liked" />
+                    ) : (
+                      <AiOutlineHeart />
+                    )}
                   </button>
                 </div>
               </div>
@@ -76,11 +80,15 @@ const Wrapper = styled.div`
       font-size: 1.5rem;
       transition: var(--transition);
       :hover {
-        color: red;
+        /* color: red; */
 
         filter: drop-shadow(0 0 10px red);
       }
     }
+  }
+
+  .liked {
+    color: red;
   }
   @media only screen and (max-width: 650px) {
     .product {

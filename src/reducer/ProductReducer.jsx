@@ -5,6 +5,9 @@ import {
   GET_SINGLE_PRODUCTS_BEGIN,
   GET_SINGLE_PRODUCTS_SUCCESS,
   GET_SINGLE_PRODUCTS_ERROR,
+  LIKE,
+  UNLIKE,
+  CLEAR_WISHLIST,
 } from "../actions";
 
 const reducer = (state, { type, payload }) => {
@@ -53,6 +56,37 @@ const reducer = (state, { type, payload }) => {
     };
   }
 
+  // wishlist
+
+  if (type === LIKE) {
+    const newLikedProducts = state.products.map((item) => {
+      if (item.id === payload) {
+        return { ...item, wishlisted: !item.wishlisted };
+      }
+      return item;
+    });
+
+    const TotalLikedProducts = newLikedProducts.filter(
+      (item) => item.wishlisted === true
+    );
+    console.log(TotalLikedProducts);
+    return {
+      ...state,
+      products: newLikedProducts,
+      wishlisted: TotalLikedProducts,
+    };
+  }
+
+  // unlike
+
+  if (type === UNLIKE) {
+    const newProducts = state.wishlisted.filter((item) => item.id !== payload);
+    return { ...state, wishlisted: newProducts };
+  }
+
+  if (type === CLEAR_WISHLIST) {
+    return { ...state, wishlisted: [] };
+  }
   throw new Error(`no ${type} is specified`);
 };
 export default reducer;

@@ -53,15 +53,15 @@ const Cart = () => {
                   <li>
                     <div>
                       <h5>{name}</h5>
-                      <p className="color d-flex align-items-center my-2">
+                      <div className="color d-flex align-items-center my-2">
                         Color:
-                        <p
+                        <div
                           className="ms-3"
                           style={{
                             background: color,
                           }}
-                        ></p>
-                      </p>
+                        ></div>
+                      </div>
                       <p className="d-none d-lg-block">category: {category}</p>
                       <p className="price d-lg-none">
                         &#x20B9; {price * amount}
@@ -132,7 +132,7 @@ const Cart = () => {
                 Enter your destination to get a shipping estimate.
               </Card.Text>
               <div>
-                <p>* country</p>
+                <span>* country</span>
                 <Form.Select aria-label="Default select example">
                   <option value="india">India</option>
                   <option value="pakistan">Pakistan</option>
@@ -140,7 +140,7 @@ const Cart = () => {
                 </Form.Select>
               </div>
               <div className="my-4">
-                <p>* Region/state</p>
+                <span>* Region/state</span>
                 <Form.Select aria-label="Default select example">
                   <option value="TamilNadu">TamilNadu</option>
                   <option value="Kerala">Kerala</option>
@@ -148,7 +148,7 @@ const Cart = () => {
                 </Form.Select>
               </div>
               <div className="mb-4">
-                <p>* Zip/postal code</p>
+                <span>* Zip/postal code</span>
                 <Form.Control
                   className=""
                   type="text"
@@ -182,16 +182,16 @@ const Cart = () => {
             <Card.Body>
               <Card.Text>
                 <span className="d-flex justify-content-between mt-2">
-                  <p>Total Products : </p>
-                  <p className="total text-light bg-primary px-2 rounded-5">
+                  <span>Total Products : </span>
+                  <span className="total text-light bg-primary px-2 rounded-5">
                     {total_Amount}
-                  </p>
+                  </span>
                 </span>
                 <span className="d-flex justify-content-between my-4">
-                  <p>Grand Total : </p>
-                  <p className="total text-success fw-semibold">
+                  <span>Grand Total : </span>
+                  <span className="total text-success fw-semibold">
                     {total_Price}
-                  </p>
+                  </span>
                 </span>
               </Card.Text>
               <Button
@@ -293,7 +293,7 @@ const Wrapper = styled.section`
       }
     }
     .color {
-      p {
+      div {
         height: 25px;
         width: 25px;
         border-radius: 50%;

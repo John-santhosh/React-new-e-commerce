@@ -110,6 +110,9 @@ button {
   text-transform: capitalize;
   border: 1px solid var(--clr-s-1);
 }
+.btn-100 {
+  width: 100%;
+}
 
 .btn:hover {
   background-color: var(--clr-s-1);
@@ -133,4 +136,10 @@ button {
 
 p {
   margin: 0;
+}
+.underline {
+  background-color: var(--clr-p-6);
+  height: 5px;
+  width: 100px;
+  border-radius: 20px;
 }

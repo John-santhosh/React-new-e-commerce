@@ -28,16 +28,11 @@ const Products = () => {
                 onChange={(e) => {
                   changeSort(e.target.value);
                 }}
+                value={sort}
               >
-                <option selected={sort === "default"} value="default">
-                  None
-                </option>
-                <option selected={sort === "ASCENDING"} value="ASCENDING">
-                  Low to High
-                </option>
-                <option selected={sort === "DESCENDING"} value="DESCENDING">
-                  High to Low
-                </option>
+                <option value="default">None</option>
+                <option value="ASCENDING">Low to High</option>
+                <option value="DESCENDING">High to Low</option>
               </select>
               <p>
                 showing {filtered_product.length} of {all_products.length}

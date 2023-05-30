@@ -7,15 +7,18 @@ import "animate.css";
 import ProductsContext from "./context/ProductsContext.jsx";
 import CartContext from "./context/CartContext.jsx";
 import FilterContext from "./context/FilterContext.jsx";
+import UserContextProvider from "./context/UserContext.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <ProductsContext>
-    <FilterContext>
-      <AppContext>
-        <CartContext>
-          <App />
-        </CartContext>
-      </AppContext>
-    </FilterContext>
-  </ProductsContext>
+  <UserContextProvider>
+    <ProductsContext>
+      <FilterContext>
+        <AppContext>
+          <CartContext>
+            <App />
+          </CartContext>
+        </AppContext>
+      </FilterContext>
+    </ProductsContext>
+  </UserContextProvider>
 );

@@ -14,10 +14,18 @@ import InputGroup from "react-bootstrap/InputGroup";
 
 import { useGlobalContext } from "../context/Context";
 import { useCartContext } from "../context/CartContext";
+import { useUserContext } from "../context/UserContext";
+
+import Button from "react-bootstrap/Button";
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
+import { useProductsProvider } from "../context/ProductsContext";
 
 const Navbar = () => {
   const { total_Amount } = useCartContext();
   const { openSidebar } = useGlobalContext();
+  const { userLogged } = useUserContext();
+  const { wishlisted } = useProductsProvider();
   return (
     <Wrapper className="d-grid">
       <Sidebar></Sidebar>
@@ -42,51 +50,84 @@ const Navbar = () => {
 
         {/* user */}
         <ol className="user_details d-flex">
-          <li
-            className="search"
-            onClick={(e) => {
-              // console.log(e.target);
-              if (e.target.placeholder) {
-                console.log(true);
-                return;
+          <li className="search">
+            <OverlayTrigger
+              trigger="click"
+              placement="bottom"
+              overlay={
+                <Popover id={`popover-positioned-bottom`}>
+                  <Popover.Body>
+                    <InputGroup className="">
+                      <Form.Control
+                        placeholder="Search"
+                        aria-label="Recipient's username"
+                        aria-describedby="basic-addon2"
+                      />
+                      <button className="btn btn-solid">
+                        <AiOutlineSearch />
+                      </button>
+                    </InputGroup>
+                  </Popover.Body>
+                </Popover>
               }
-              e.currentTarget.querySelector("div").classList.toggle("show");
-            }}
-          >
-            <button>
-              <AiOutlineSearch />
-            </button>
-            <div className="">
-              <InputGroup className="mb-3">
-                <Form.Control
-                  placeholder="Search"
-                  aria-label="Recipient's username"
-                  aria-describedby="basic-addon2"
-                />
-                <button className="btn btn-solid">
-                  <AiOutlineSearch />
-                </button>
-              </InputGroup>
-            </div>
+            >
+              <a>
+                <AiOutlineSearch />
+              </a>
+            </OverlayTrigger>
           </li>
           <li
             className="user"
-            onClick={(e) => {
-              e.currentTarget.querySelector("div").classList.toggle("show");
-            }}
+            // onClick={(e) => {
+            //   const length = e.currentTarget.querySelectorAll("div > a").length;
+
+            //   // height of a inner elements
+            //   const height =
+            //     e.currentTarget.querySelector("div>a").getBoundingClientRect()
+            //       .height * length;
+
+            //   const divElement = e.currentTarget.querySelector("div");
+
+            //   // setting height
+            //   divElement.style.height = `${height}px`;
+            //   e.currentTarget.querySelector("div").classList.toggle("show");
+            // }}
           >
-            <button>
-              <TbUserCircle />
-            </button>
-            <div>
-              <p>Login</p>
-              <p>Register</p>
-            </div>
+            <OverlayTrigger
+              trigger="click"
+              placement="bottom"
+              overlay={
+                <Popover id={`popover-positioned-bottom`}>
+                  <Popover.Body>
+                    <div className="fs-6">
+                      <Link to="/login">
+                        <p>Login</p>
+                      </Link>
+                      <Link to="/register">
+                        <p className="my-2">Register</p>
+                      </Link>
+
+                      {userLogged && (
+                        <Link to="/myaccount">
+                          <p>MyAccount</p>
+                        </Link>
+                      )}
+                    </div>
+                  </Popover.Body>
+                </Popover>
+              }
+            >
+              <a>
+                <TbUserCircle />
+              </a>
+            </OverlayTrigger>
           </li>
           <li>
             <button>
-              <AiOutlineHeart />
-              <span>{1}</span>
+              <Link to="/wishlist">
+                <AiOutlineHeart />
+                <span>{wishlisted.length}</span>
+              </Link>
             </button>
           </li>
           <li>
@@ -111,7 +152,7 @@ const Navbar = () => {
 const Wrapper = styled.nav`
   position: sticky;
   top: 0;
-  z-index: 9999;
+  z-index: 100;
   background: var(--clr-p-11);
   height: 4rem;
   place-items: center;
@@ -216,7 +257,7 @@ const Wrapper = styled.nav`
       li {
         span {
           left: 0.6rem;
-          bottom: 1.1rem;
+          bottom: 1rem;
         }
       }
     }
@@ -246,51 +287,11 @@ const Wrapper = styled.nav`
       }
     }
 
-    li.user {
-      position: relative;
-      div {
-        position: absolute;
-        left: 20%;
-        font-size: 1rem;
-        background-color: #ffffff;
-        width: 120px;
-        height: 0;
-        overflow: hidden;
-        transition: var(--transition);
-        border: 0px solid transparent;
-
-        p {
-          padding: 0.5rem 1rem;
-          margin: 0;
-        }
-      }
-      div.show {
-        border: 1px solid var(--clr-p-1);
-        height: 90px;
-      }
-    }
     svg {
       transition: var(--transition);
     }
     li svg:hover {
       filter: drop-shadow(0 0 10px var(--clr-p-1));
-    }
-
-    li.search {
-      position: relative;
-
-      > div {
-        width: 250px;
-        position: absolute;
-        right: 0;
-        height: 0;
-        overflow: hidden;
-        transition: var(--transition);
-      }
-      div.show {
-        height: 50px;
-        overflow: visible;
-      }
     }
   }
 `;

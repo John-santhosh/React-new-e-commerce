@@ -11,6 +11,9 @@ import {
   GET_SINGLE_PRODUCTS_BEGIN,
   GET_SINGLE_PRODUCTS_SUCCESS,
   GET_SINGLE_PRODUCTS_ERROR,
+  LIKE,
+  UNLIKE,
+  CLEAR_WISHLIST,
 } from "../actions";
 import Airtable from "airtable";
 
@@ -26,11 +29,12 @@ const ProductsContext = ({ children }) => {
     single_product_loading: false,
     single_product_error: false,
     single_product: {},
+    wishlisted: [],
   };
   const [state, dispatch] = useReducer(reducer, initialState);
   const fetchProducts = () => {
     dispatch({ type: GET_PRODUCTS_BEGIN });
-    console.log("products begin");
+    // console.log("products begin");
     airTable("data")
       .select({
         view: "Grid view",
@@ -42,6 +46,7 @@ const ProductsContext = ({ children }) => {
               ...record.fields,
               image: record.fields.images[0].url,
               id: record.id,
+              wishlisted: false,
             };
           });
           dispatch({ type: GET_PRODUCTS_SUCCESS, payload: products });
@@ -67,7 +72,6 @@ const ProductsContext = ({ children }) => {
 
   const fetchSingleProduct = (id) => {
     dispatch({ type: GET_SINGLE_PRODUCTS_BEGIN });
-    console.log("single product begin");
     airTable("data").find(id, function (err, record) {
       if (err) {
         console.error(err);
@@ -77,13 +81,36 @@ const ProductsContext = ({ children }) => {
 
       dispatch({
         type: GET_SINGLE_PRODUCTS_SUCCESS,
-        payload: { ...record.fields },
+        payload: { ...record.fields, id: record.id },
       });
     });
   };
 
+  //
+  const likeProduct = (id) => {
+    dispatch({ type: LIKE, payload: id });
+  };
+
+  //
+  const removeLike = (id) => {
+    dispatch({ type: UNLIKE, payload: id });
+  };
+
+  // clear Wishlist
+
+  const clearWishlist = () => {
+    dispatch({ type: CLEAR_WISHLIST });
+  };
   return (
-    <ProductsProvider.Provider value={{ ...state, fetchSingleProduct }}>
+    <ProductsProvider.Provider
+      value={{
+        ...state,
+        fetchSingleProduct,
+        likeProduct,
+        removeLike,
+        clearWishlist,
+      }}
+    >
       {children}
     </ProductsProvider.Provider>
   );

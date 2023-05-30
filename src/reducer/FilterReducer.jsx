@@ -21,7 +21,7 @@ const reducer = (state, { type, payload, categories }) => {
   }
 
   if (type === LOAD_PRODUCTS) {
-    console.log("load PRODUCT");
+    // console.log("load PRODUCT");
     const maxPrice = payload.reduce((prev, acc) => {
       if (prev < acc.price) {
         return acc.price;
@@ -182,7 +182,7 @@ const reducer = (state, { type, payload, categories }) => {
       filtered_product: newRes,
     };
 
-    console.log(tempFilter);
+    // console.log(tempFilter);
     // if (state.filters.categories["all"] === true) {
     //   console.log(true);
     //   return {
@@ -212,6 +212,19 @@ const reducer = (state, { type, payload, categories }) => {
           categories: {
             ...state.filters.categories,
             all: true,
+          },
+        },
+      };
+    }
+    if (allFalse === true) {
+      return {
+        ...state,
+        filtered_product: products,
+        filters: {
+          ...state.filters,
+          categories: {
+            ...state.filters.categories,
+            all: false,
           },
         },
       };

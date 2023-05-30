@@ -12,7 +12,6 @@ const CartProvider = createContext();
 const CartContext = ({ children }) => {
   const initialState = {
     cart: [],
-    wishList: [],
     total_Amount: 0,
     total_Price: 0,
   };

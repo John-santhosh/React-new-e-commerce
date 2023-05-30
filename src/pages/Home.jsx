@@ -100,6 +100,9 @@ const Wrapper = styled.section`
     .services {
       grid-template-columns: repeat(2, 1fr);
       gap: 2rem;
+      > div {
+        justify-content: center;
+      }
     }
   }
   @media only screen and (max-width: 500px) {
