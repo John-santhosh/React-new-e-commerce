@@ -13,7 +13,7 @@ const CartContext = ({ children }) => {
   const initialState = {
     cart: [],
     total_Amount: 0,
-    total_Price: 0,
+    total_Price: 854,
   };
 
   const [state, dispatch] = useReducer(reducer, initialState);

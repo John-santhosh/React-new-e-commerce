@@ -5,5 +5,14 @@ import WishList from "./WishList";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
 import Cart from "./Cart";
-
-export { Login, MyAccount, Register, Navbar, Footer, Cart, WishList };
+import StripeCheckoutPage from "./StripeCheckoutPage";
+export {
+  Login,
+  MyAccount,
+  Register,
+  Navbar,
+  Footer,
+  Cart,
+  WishList,
+  StripeCheckoutPage,
+};

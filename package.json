@@ -11,6 +11,8 @@
     "start": "netlify dev"
   },
   "dependencies": {
+    "@stripe/react-stripe-js": "^2.1.0",
+    "@stripe/stripe-js": "^1.54.0",
     "airtable": "^0.12.1",
     "animate.css": "^4.1.1",
     "axios": "^1.4.0",
