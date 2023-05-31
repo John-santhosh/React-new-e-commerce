@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
+import { useEffect } from "react";
 
 const Cart = () => {
   const { total_Amount, total_Price } = useCartContext();
@@ -19,6 +20,8 @@ const Cart = () => {
   const productLimited = () => {
     toast.error("max_Limit reached");
   };
+
+  useEffect(() => {}, []);
   return (
     <Wrapper>
       <Hero page={"cart"}></Hero>
@@ -112,9 +115,12 @@ const Cart = () => {
         </div>
 
         {cart.length !== 0 && (
-          <div className="d-flex  my-5 btn-container">
+          <div className="d-flex  my-5 btn-container flex-wrap  gap-4 justify-content-center justify-content-lg-between">
             <button className="btn rounded-5 px-5">
               <Link to="/products">CONTINUE SHOPPING</Link>
+            </button>
+            <button className="btn rounded-5 px-5 bg-primary text-light">
+              <a href="#checkout">Checkout</a>
             </button>
             <button className="btn rounded-5 px-5" onClick={() => clearCart()}>
               CLEAR SHOPPING CART
@@ -175,7 +181,7 @@ const Cart = () => {
             </Card.Body>
           </Card>
           {/*  */}
-          <Card>
+          <Card id="checkout">
             <Card.Header>
               <Card.Title className="m-0">cart Total</Card.Title>
             </Card.Header>
@@ -194,12 +200,14 @@ const Cart = () => {
                   </span>
                 </span>
               </Card.Text>
-              <Button
-                className="btn-solid"
-                variant="primary rounded-5 px-4 mb-4"
-              >
-                Proceed to Checkout
-              </Button>
+              <Link to="/checkout">
+                <Button
+                  className="btn-solid"
+                  variant="primary rounded-5 px-4 mb-4"
+                >
+                  Proceed to Checkout
+                </Button>
+              </Link>
             </Card.Body>
           </Card>
         </div>
@@ -209,6 +217,9 @@ const Cart = () => {
 };
 
 const Wrapper = styled.section`
+  #checkout {
+    background-color: #cfe2ff;
+  }
   min-height: 100vh;
   h3 {
     color: var(--clr-p-3);

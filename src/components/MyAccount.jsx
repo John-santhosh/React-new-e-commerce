@@ -36,7 +36,9 @@ const MyAccount = () => {
               </div>
             </div>
             <div className="d-flex flex-wrap justify-content-center gap-3">
-              <button className="btn rounded-5 px-5 ">checkout</button>
+              <Link to="/checkout">
+                <button className="btn rounded-5 px-5 ">checkout</button>
+              </Link>
               <button
                 onClick={() => {
                   signOut(auth)

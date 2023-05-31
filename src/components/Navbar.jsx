@@ -19,6 +19,7 @@ import { useUserContext } from "../context/UserContext";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { useProductsProvider } from "../context/ProductsContext";
+import { ImUserCheck, ImUserPlus } from "react-icons/im";
 
 const Navbar = () => {
   const { total_Amount } = useCartContext();
@@ -118,9 +119,7 @@ const Navbar = () => {
                 </Popover>
               }
             >
-              <a>
-                <TbUserCircle />
-              </a>
+              <a>{userLogged ? <ImUserCheck /> : <ImUserPlus />}</a>
             </OverlayTrigger>
           </li>
           <li>
@@ -263,7 +262,7 @@ const Wrapper = styled.nav`
       }
     }
     .logo img {
-      max-width: 150px;
+      max-width: 120px;
     }
   }
   .user_details {

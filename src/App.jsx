@@ -11,6 +11,7 @@ import {
   Cart,
   WishList,
 } from "./components/index";
+import Checkout from "./pages/Checkout";
 function App() {
   return (
     <BrowserRouter>
@@ -26,6 +27,7 @@ function App() {
         <Route path="/register" element={<Register />}></Route>
         <Route path="/myaccount" element={<MyAccount />}></Route>
         <Route path="/wishlist" element={<WishList />}></Route>
+        <Route path="/checkout" element={<Checkout />}></Route>
         <Route path="*" element={<Error />}></Route>
       </Routes>
       <Footer></Footer>
