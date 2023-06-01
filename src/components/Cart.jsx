@@ -1,27 +1,35 @@
+import { useEffect } from "react";
 import styled from "styled-components";
 import Hero from "./Hero";
-import { useCartContext } from "../context/CartContext";
 import { ImCross } from "react-icons/im";
 import { IoMdArrowDropdown, IoMdArrowDropup } from "react-icons/io";
 import { Link } from "react-router-dom";
 import { Button, Card } from "react-bootstrap";
 import Form from "react-bootstrap/Form";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
 
+import { useCartContext } from "../context/CartContext";
+
+import { useUserContext } from "../context/UserContext";
 const Cart = () => {
-  const { total_Amount, total_Price } = useCartContext();
-
-  const { cart, removeItem, ToggleCount, clearCart } = useCartContext();
-
+  const {
+    cart,
+    removeItem,
+    ToggleCount,
+    clearCart,
+    total_Amount,
+    total_Price,
+  } = useCartContext();
   const productAdded = () => {
     toast.success("Added To Cart");
   };
   const productLimited = () => {
     toast.error("max_Limit reached");
   };
-
-  useEffect(() => {}, []);
+  // console.log(cart);
+  // useEffect(() => {
+  //   postData(cart);
+  // }, [cart]);
   return (
     <Wrapper>
       <Hero page={"cart"}></Hero>
@@ -48,6 +56,7 @@ const Cart = () => {
             cart.map((item) => {
               // console.log(item);
               const { id, price, image, name, category, amount, color } = item;
+              // postData(item);
               return (
                 <ul key={id}>
                   <li>

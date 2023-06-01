@@ -20,7 +20,7 @@ import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { useProductsProvider } from "../context/ProductsContext";
 import { ImUserCheck, ImUserPlus } from "react-icons/im";
-
+import { pages } from "../data";
 const Navbar = () => {
   const { total_Amount } = useCartContext();
   const { openSidebar } = useGlobalContext();
@@ -46,7 +46,27 @@ const Navbar = () => {
             <NavLink to="/products">products</NavLink>
           </li>
           <li>
-            Pages <FaChevronDown />
+            <OverlayTrigger
+              trigger="click"
+              placement="bottom"
+              overlay={
+                <Popover id={`popover-positioned-bottom`}>
+                  <Popover.Body className="p-">
+                    {pages.map((page, ind) => {
+                      return (
+                        <Link key={ind} to={page.url}>
+                          <h6 className="my-3 px-4">{page.text}</h6>
+                        </Link>
+                      );
+                    })}
+                  </Popover.Body>
+                </Popover>
+              }
+            >
+              <a role="button">
+                Pages <FaChevronDown />
+              </a>
+            </OverlayTrigger>
           </li>
         </ol>
 
@@ -102,17 +122,28 @@ const Navbar = () => {
                 <Popover id={`popover-positioned-bottom`}>
                   <Popover.Body>
                     <div className="fs-6">
-                      <Link to="/login">
-                        <p>Login</p>
-                      </Link>
+                      {userLogged ? (
+                        <Link to="/myaccount">
+                          <p className="text-danger">Log out</p>
+                        </Link>
+                      ) : (
+                        <Link to="/login">
+                          <p>Login</p>
+                        </Link>
+                      )}
                       <Link to="/register">
                         <p className="my-2">Register</p>
                       </Link>
 
                       {userLogged && (
-                        <Link to="/myaccount">
-                          <p>MyAccount</p>
-                        </Link>
+                        <>
+                          <Link to="/myaccount">
+                            <p className="my-2">MyAccount</p>
+                          </Link>
+                          <Link to="/checkout">
+                            <p>Checkout</p>
+                          </Link>
+                        </>
                       )}
                     </div>
                   </Popover.Body>

@@ -60,7 +60,7 @@ export default function CheckoutForm() {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "https://air-store-e-commerce-john.netlify.app/",
+        return_url: "http://localhost:8888/checkout",
       },
     });
 
@@ -95,7 +95,11 @@ export default function CheckoutForm() {
         </span>
       </button>
       {/* Show any error or success messages */}
-      {message && <div id="payment-message">{message}</div>}
+      {message && (
+        <div className="bg-dark mt-4 pb-3 text-white" id="payment-message">
+          {message}
+        </div>
+      )}
     </form>
   );
 }

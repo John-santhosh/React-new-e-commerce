@@ -15,14 +15,11 @@ exports.handler = async function (event, context) {
       const paymentIntent = await stripe.paymentIntents.create({
         amount: calculateOrderAmount(total_Price),
         currency: "inr",
-        automatic_payment_methods: {
-          enabled: true,
-        },
       });
       // console.log(paymentIntent.client_secret);
       return {
         statusCode: 200,
-        body: paymentIntent.client_secret,
+        body: JSON.stringify({ client_secret: paymentIntent.client_secret }),
       };
     } catch (error) {
       console.log(error);

@@ -10,7 +10,7 @@ import { useCartContext } from "../context/CartContext";
 import { useProductsProvider } from "../context/ProductsContext";
 const MyAccount = () => {
   const { current_user, signOut: logOut, userLogged } = useUserContext();
-  const { cart, total_Price } = useCartContext();
+  const { cart, total_Price, clearCart } = useCartContext();
   const { wishlisted } = useProductsProvider();
   return (
     <Wrapper>
@@ -44,6 +44,7 @@ const MyAccount = () => {
                   signOut(auth)
                     .then(() => {
                       logOut();
+                      clearCart();
                       toast.success("Logout Success");
                     })
                     .catch((error) => {

@@ -9,89 +9,138 @@ import {
   useStripe,
   useElements,
 } from "@stripe/react-stripe-js";
+
+// import CheckoutForm from "./StripeCheckoutForm";
+
 import { useCartContext } from "../context/CartContext";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useUserContext } from "../context/UserContext";
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-// const CheckoutForm = () => {
-//   const { total_Price, clearCart } = useCartContext();
-//   const [succeeded, setSucceeded] = useState(false);
-//   const [error, setError] = useState(null);
-//   const [processing, setProcessing] = useState("");
-//   const [disabled, setDisabled] = useState(true);
-//   const [clientSecret, setClientState] = useState("");
-//   const stripe = useStripe();
-//   const elements = useElements();
-//   const handleSubmit = () => {};
-//   const paymentElementOptions = {
-//     layout: "tabs",
-//   };
-//   const cardStyle = {
-//     style: {
-//       base: {
-//         color: "#32325d",
-//         fontFamily: "Arial, sans-serif",
-//         fontSmoothing: "antialiased",
-//         fontSize: "16px",
-//         "::placeholder": {
-//           color: "#32325d",
-//         },
-//       },
-//       invalid: {
-//         color: "#fa755a",
-//         iconColor: "#fa755a",
-//       },
-//     },
-//   };
-//   const handleChange = (e) => {};
-//   return (
-//     <form id="payment-form" onSubmit={handleSubmit}>
-//       <CardElement
-//         id="card-element"
-//         options={cardStyle}
-//         onChange={handleChange}
-//       />
-//       <button disabled={processing || disabled || succeeded} id="submit">
-//         <span id="button-text">
-//           {processing ? <div className="spinner" id="spinner"></div> : "pay"}
-//         </span>
-//       </button>
-//       {error && <div className="card-error" role=" alert"></div>}
+const CheckoutForm = ({ clientSecret: cs }) => {
+  const { total_Price, clearCart } = useCartContext();
+  const { current_user } = useUserContext();
+  const [succeeded, setSucceeded] = useState(false);
+  const [error, setError] = useState(null);
+  const [processing, setProcessing] = useState("");
+  const [disabled, setDisabled] = useState(true);
+  const [clientSecret, setClientState] = useState("");
+  const stripe = useStripe();
+  const navigate = useNavigate();
+  useEffect(() => {
+    setClientState(cs);
+  }, [cs]);
+  const elements = useElements();
 
-//       <p className={succeeded ? "result-message" : "result-message hidden"}>
-//         payment succeeded, see the result in your{" "}
-//         <a href={"https://dashboard.stripe.com/test/payments"}>
-//           Stripe dashboard
-//         </a>
-//       </p>
-//     </form>
-//   );
-// };
+  const cardStyle = {
+    style: {
+      base: {
+        color: "#32325d",
+        fontFamily: "Arial, sans-serif",
+        fontSmoothing: "antialiased",
+        fontSize: "16px",
+        "::placeholder": {
+          color: "#32325d",
+        },
+      },
+      invalid: {
+        color: "#fa755a",
+        iconColor: "#fa755a",
+      },
+    },
+  };
+  const handleChange = async (event) => {
+    setError(event.error ? event.error.message : "");
+    setDisabled(event.empty);
+  };
+  const handleSubmit = async (ev) => {
+    ev.preventDefault();
+    setProcessing(true);
+    const payload = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: elements.getElement(CardElement),
+      },
+    });
+    if (payload.error) {
+      setError(`payment failed ${payload.error.message}`);
+      setProcessing(false);
+    } else {
+      setError(null);
 
-import CheckoutForm from "./StripeCheckoutForm";
+      setProcessing(false);
+      setSucceeded(true);
+      setTimeout(() => {
+        clearCart();
+        navigate("/");
+      }, 3000);
+    }
+  };
+  return (
+    <div>
+      {succeeded ? (
+        <div className="d-flex justify-content-center flex-column">
+          <h4>Your payment was successful</h4>
+          <h6>Redirecting to home page shortly</h6>
+          <Link className="btn btn-solid mb-5" to="/">
+            Back To Home
+          </Link>
+        </div>
+      ) : (
+        <article className="mb-5">
+          <h5> Hello, {current_user !== "" && current_user}</h5>
+          <h5>your Total is: {total_Price}</h5>
+          <h5>Test Card Number: 4242 4242 4242 4242 </h5>
+          <h5>Other Details: 12/34, 567, 12345 </h5>
+        </article>
+      )}
+      <form id="payment-form" onSubmit={handleSubmit}>
+        <CardElement
+          className="mb-4 border-bottom border-danger"
+          id="card-element"
+          options={cardStyle}
+          onChange={handleChange}
+        />
+        <button disabled={processing || disabled || succeeded} id="submit">
+          <span id="button-text">
+            {processing ? (
+              <div className="spinner" id="spinner"></div>
+            ) : (
+              `pay ₹ ${total_Price}`
+            )}
+          </span>
+        </button>
+        {error && <div className="card-error" role=" alert"></div>}
+
+        <p className={succeeded ? "result-message" : "result-message hidden"}>
+          payment succeeded, see the result in your{" "}
+          <a href={"https://dashboard.stripe.com/test/payments"}>
+            Stripe dashboard
+          </a>
+        </p>
+      </form>
+    </div>
+  );
+};
+
 const StripeCheckoutPage = () => {
-  const [clientSecret, setClientSecret] = useState("");
   const { total_Price } = useCartContext();
+  const [clientSecret, setClientSecret] = useState("");
   const createPaymentIntent = async () => {
-    console.log("received payment req => from stripe checkout");
+    // console.log("received payment req => from stripe checkout");
     try {
       const res = await axios.post(
         ".netlify/functions/create-payment-intent",
         JSON.stringify({ total_Price })
       );
-      console.log(res.data);
-      setClientSecret(res.data);
+      // console.log(res);
+      const { client_secret } = res.data;
+      // console.log(client_secret);
+      setClientSecret(client_secret);
     } catch (error) {
       console.log(error);
     }
-  };
-
-  const appearance = {
-    theme: "stripe",
-  };
-  const options = {
-    clientSecret,
-    appearance,
   };
 
   useEffect(() => {
@@ -100,16 +149,21 @@ const StripeCheckoutPage = () => {
   }, []);
   return (
     <Wrapper>
-      {clientSecret !== "" && (
+      {/* {clientSecret !== "" && (
         <Elements options={options} stripe={stripePromise}>
           <CheckoutForm />
         </Elements>
-      )}
+      )} */}
+      <Elements stripe={stripePromise}>
+        <CheckoutForm clientSecret={clientSecret} />
+      </Elements>
     </Wrapper>
   );
 };
 
 const Wrapper = styled.section`
+  display: grid;
+  place-items: center;
   form {
     width: 30vw;
     min-width: 500px;

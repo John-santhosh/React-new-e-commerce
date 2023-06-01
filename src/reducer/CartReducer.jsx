@@ -82,6 +82,11 @@ const reducer = (state, { type, payload, functions }) => {
     const { amount, price } = result;
     return { ...state, total_Amount: amount, total_Price: price };
   }
+
+  if (type === "CREATE_EXISTING_CART") {
+    // console.log(payload);
+    return { ...state, cart: payload };
+  }
   throw new Error(`no ${type} is specified`);
 };
 

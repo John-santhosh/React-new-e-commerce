@@ -8,6 +8,10 @@ const reducer = (state, { type, payload }) => {
   if (type == SIGN_OUT_USER) {
     return { ...state, current_user: "", userLogged: false };
   }
+  if (type === "CREATE_EXISTING_CART") {
+    // console.log(payload);
+    return { ...state, user_cart: payload };
+  }
   return state;
   // throw new Error(`no ${payload.type} defined `)
 };

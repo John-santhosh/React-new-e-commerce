@@ -52,3 +52,14 @@ export const homeService = [
     description: "Free Shipping on all Order",
   },
 ];
+
+export const pages = [
+  { text: "About", url: "/about" },
+  { text: "Products", url: "/Products" },
+  { text: "Home", url: "/" },
+  { text: "Cart", url: "/cart" },
+  { text: "Register", url: "/register" },
+  { text: "Login", url: "/login" },
+  { text: "Profile", url: "/profile" },
+  { text: "Checkout", url: "/checkout" },
+];
