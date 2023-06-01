@@ -1,15 +1,37 @@
+![main logo](./public/logo.svg)
+
+<br>
+
+![GitHub last commit](https://img.shields.io/github/last-commit/John-santhosh/React-new-e-commerce)
+
 # React E-Commerce Website
 
+## About The Project
+
 This is a E-commerce website built with `React` allows user to purchase goods Online, user can make payment and added items to the cart and wish list items for later
+
+👉 [Live Demo](https://air-store-e-commerce-john.netlify.app/)
+
+## Build with:
+
+» React  
+ » FireBase  
+ » Styled Components  
+<br/>
+
+# Screenshot of the project 📸
+
+<br/>
+ <h2 align=center>Home Page 🏡</h2>
+
+![Sample image](./public/screenshot.png)
 
 ## Installation
 
 ```bash
-  npm create vite@latest <folder_Name> -- --template react
+  git clone https://github.com/John-santhosh/React-new-e-commerce
 
-  cd <folder_Name>
-
-  npm i
+  npm intall
 
   npm run dev
 ```
