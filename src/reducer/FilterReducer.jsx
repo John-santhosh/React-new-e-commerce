@@ -216,19 +216,20 @@ const reducer = (state, { type, payload, categories }) => {
         },
       };
     }
-    if (allFalse === true) {
-      return {
-        ...state,
-        filtered_product: products,
-        filters: {
-          ...state.filters,
-          categories: {
-            ...state.filters.categories,
-            all: false,
-          },
-        },
-      };
-    }
+
+    // if (allFalse === true) {
+    //   return {
+    //     ...state,
+    //     filtered_product: products,
+    //     filters: {
+    //       ...state.filters,
+    //       categories: {
+    //         ...state.filters.categories,
+    //         all: false,
+    //       },
+    //     },
+    //   };
+    // }
     return tempFilter;
   }
   // return state;
