@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import styled from "styled-components";
 import Hero from "./Hero";
 import { ImCross } from "react-icons/im";
@@ -10,7 +9,6 @@ import { toast } from "react-toastify";
 
 import { useCartContext } from "../context/CartContext";
 
-import { useUserContext } from "../context/UserContext";
 const Cart = () => {
   const {
     cart,

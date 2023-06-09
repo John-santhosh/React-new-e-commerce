@@ -11,14 +11,12 @@ import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
 import { FcGoogle } from "react-icons/fc";
-import { useCartContext } from "../context/CartContext";
 import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
   const {
     userLogged,
     current_user,
-    current_user_id,
     googleSignUp,
     signOut: signout,
   } = useUserContext();

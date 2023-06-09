@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import reducer from "../reducer/CartReducer";
 import {
   ADD_CART_ITEM,
@@ -14,7 +8,7 @@ import {
   GET_TOTAL,
 } from "../actions";
 const CartProvider = createContext();
-import { setDoc, doc, getDoc, collection } from "firebase/firestore";
+import { setDoc, doc } from "firebase/firestore";
 import { db } from "../config/Config";
 import { useUserContext } from "./UserContext";
 
@@ -27,7 +21,7 @@ const CartContext = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // console.log(initialState.cart);
 
-  const { current_user, user_cart, current_user_id } = useUserContext();
+  const { user_cart, current_user_id } = useUserContext();
 
   const postData = async (object, collection) => {
     if (!current_user_id) {

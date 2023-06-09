@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Hero from "./Hero";
 import { ImCross } from "react-icons/im";
-import { useCartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
 import { useProductsProvider } from "../context/ProductsContext";
 
@@ -141,7 +140,7 @@ const Wrapper = styled.section`
     }
   }
   @media only screen and (max-width: 992px) {
-    ul {
+    ul:not(ul.heading) {
       /* grid-template-columns: repeat(4, 1fr); */
       gap: 0.5rem;
       img {
@@ -168,6 +167,9 @@ const Wrapper = styled.section`
       flex-direction: column;
       justify-content: center;
       gap: 1rem;
+    }
+    .heading {
+      font-size: 0.8rem;
     }
   }
 `;
