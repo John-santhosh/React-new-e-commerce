@@ -1,30 +1,24 @@
-import styled from "styled-components";
+import { useState } from "react";
+import { useEffect } from "react";
 
-import user from "../assets/userpic.jpg";
-import Hero from "./Hero";
+import styled from "styled-components";
 import { signOut } from "firebase/auth";
 import { auth, db } from "../config/Config";
-import { toast } from "react-toastify";
+import { doc, getDoc, setDoc } from "firebase/firestore";
+
+import Hero from "./Hero";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import { useUserContext } from "../context/UserContext";
 import { useCartContext } from "../context/CartContext";
-import { useProductsProvider } from "../context/ProductsContext";
 
 import { ImUser } from "react-icons/im";
 import { SlLogout } from "react-icons/sl";
-import { useState } from "react";
-import { useEffect } from "react";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const MyAccount = () => {
   const { clearCart } = useCartContext();
-  const {
-    current_user,
-    signOut: logOut,
-    userLogged,
-    current_user_id,
-  } = useUserContext();
+  const { signOut: logOut, userLogged, current_user_id } = useUserContext();
 
   const [editable, setEditable] = useState(true);
   const [details, setDetails] = useState({
@@ -38,25 +32,22 @@ const MyAccount = () => {
 
   // write to firestore
   const postData = async (id, data) => {
-    // console.log(data, id);
     try {
-      // console.log(data, id);
       await setDoc(doc(db, id, "userInfo"), {
         userInfo: data,
       }).then(() => {
         console.log("success");
         readData(current_user_id);
+        toast.success("updated");
       });
     } catch (e) {
       console.error("Error adding document: ");
     }
   };
 
-  // reade from firestore
+  // read from firestore
   const readData = async (user) => {
-    // console.log(user);
     if (!user) {
-      // console.log(null);
       return;
     }
 
@@ -224,22 +215,33 @@ const MyAccount = () => {
                   htmlFor="selectCountry"
                   className="col-sm-2 control-label"
                 >
-                  Country
+                  State
                 </label>
                 <div className="col-sm-10">
+                  {console.log(details.country)}
                   <select
                     className="form-control"
                     id="selectCountry"
                     name="country"
-                    defaultValue={details.country}
                     onChange={(e) =>
                       setDetails({ ...details, country: e.target.value })
                     }
                   >
-                    <option value="default">(please select a country)</option>
-                    <option value="tn">TamilNadu</option>
-                    <option value="kl">Kerala</option>
-                    <option value="ap">Andhra</option>
+                    <option
+                      value="default"
+                      selected={details.country === "default"}
+                    >
+                      (please select a country)
+                    </option>
+                    <option value="tn" selected={details.country === "tn"}>
+                      TamilNadu
+                    </option>
+                    <option selected={details.country === "kl"} value="kl">
+                      Kerala
+                    </option>
+                    <option selected={details.country === "ap"} value="ap">
+                      Andhra
+                    </option>
                   </select>
                 </div>
               </div>
@@ -345,57 +347,5 @@ const Wrapper = styled.section`
     }
   }
 `;
+
 export default MyAccount;
-
-/*<div className="section-center d-grid">
-        <img src={user} alt="" />
-        {userLogged ? (
-          <div className="text-center ">
-            <h2>Hi, {current_user}</h2>
-
-            <div className="d-flex gap-4 justify-content-center my-4 text-capitalize">
-              <div className="fs-5">
-                cart <br />
-                <span className="text-primary">{cart.length}</span>
-              </div>
-              <div className="fs-5">
-                WishList <br />
-                <span className="text-primary">{wishlisted.length}</span>
-              </div>
-              <div className="fs-5">
-                Total <br />
-                <span className="text-primary">{total_Price}</span>
-              </div>
-            </div>
-            <div className="d-flex flex-wrap justify-content-center gap-3">
-              <Link to="/checkout">
-                <button className="btn rounded-5 px-5 ">checkout</button>
-              </Link>
-              <button
-                onClick={() => {
-                  signOut(auth)
-                    .then(() => {
-                      logOut();
-                      clearCart();
-                      toast.success("Logout Success");
-                    })
-                    .catch((error) => {
-                      toast.success("An error happened");
-                      // An error happened.
-                    });
-                }}
-                className="rounded-5 btn btn-solid px-5"
-              >
-                Sign Out
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="text-center">
-            <h2>Please Login to Continue</h2>
-            <Link className="btn rounded-5 px-5 my-4 btn-solid" to="/login">
-              Login
-            </Link>
-          </div>
-        )}
-      </div> */
