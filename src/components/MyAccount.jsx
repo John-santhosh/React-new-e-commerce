@@ -3,7 +3,7 @@ import styled from "styled-components";
 import user from "../assets/userpic.jpg";
 import Hero from "./Hero";
 import { signOut } from "firebase/auth";
-import { auth } from "../config/Config";
+import { auth, db } from "../config/Config";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 
@@ -14,13 +14,76 @@ import { useProductsProvider } from "../context/ProductsContext";
 import { ImUser } from "react-icons/im";
 import { SlLogout } from "react-icons/sl";
 import { useState } from "react";
+import { useEffect } from "react";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const MyAccount = () => {
-  const { current_user, signOut: logOut, userLogged } = useUserContext();
-  const { cart, total_Price, clearCart } = useCartContext();
-  const { wishlisted } = useProductsProvider();
+  const { clearCart } = useCartContext();
+  const {
+    current_user,
+    signOut: logOut,
+    userLogged,
+    current_user_id,
+  } = useUserContext();
 
-  const [tab, setTab] = useState(1);
+  const [editable, setEditable] = useState(true);
+  const [details, setDetails] = useState({
+    name: "",
+    number: null,
+    gender: "",
+    email: "",
+    address: "",
+    country: "default",
+  });
+
+  // write to firestore
+  const postData = async (id, data) => {
+    // console.log(data, id);
+    try {
+      // console.log(data, id);
+      await setDoc(doc(db, id, "userInfo"), {
+        userInfo: data,
+      }).then(() => {
+        console.log("success");
+        readData(current_user_id);
+      });
+    } catch (e) {
+      console.error("Error adding document: ");
+    }
+  };
+
+  // reade from firestore
+  const readData = async (user) => {
+    // console.log(user);
+    if (!user) {
+      // console.log(null);
+      return;
+    }
+
+    const docRef = doc(db, user, "userInfo");
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      setDetails(docSnap.data().userInfo);
+    } else {
+      console.log("No such document!");
+    }
+  };
+  useEffect(() => {
+    readData(current_user_id);
+  }, [current_user_id]);
+
+  if (!userLogged) {
+    return (
+      <Wrapper className="section-center d-grid align-items-center justify-content-center">
+        <div className="text-center">
+          <h4>Please Login to continue</h4>
+          <Link to="/login" className="btn btn-solid py-1 px-4 mt-3">
+            Login
+          </Link>
+        </div>
+      </Wrapper>
+    );
+  }
   return (
     <Wrapper>
       <Hero page="Profile"></Hero>
@@ -33,116 +96,161 @@ const MyAccount = () => {
           <div className="">
             <small>Hello,</small>
             <p>
-              <strong>{"John123"}</strong>
+              <strong>{details.name}</strong>
             </p>
           </div>
         </div>
         <div className="p-3 my-md-0 my-3">
           <div className="">
-            <div className="mt-4 mb-3">
-              <h6 className="mb-2">
-                Personal Information{" "}
-                <button className="ms-4 text-primary px-2 rounded-5">
-                  Edit
-                </button>
-              </h6>
-              <div className="form-group">
-                <div className="d-flex ">
-                  <div className="col-sm-6 pe-4">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputFullName"
-                      name="full-name"
-                      disabled
-                      placeholder="Full Name"
-                    />
-                  </div>
-                  <div className="col-sm-6">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="inputFullName"
-                      disabled
-                      name="number"
-                      placeholder="10-digit number"
-                    />
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                postData(current_user_id, details);
+              }}
+            >
+              <div className="mt-4 mb-3">
+                <h6 className="mb-2">
+                  Personal Information
+                  <button
+                    className="ms-4 text-primary px-2 rounded-5"
+                    onClick={() => setEditable(!editable)}
+                    type="button"
+                  >
+                    Edit
+                  </button>
+                </h6>
+                <div className="form-group">
+                  <div className="d-flex ">
+                    <div className="col-sm-6 pe-4">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="inputFullName"
+                        name="full-name"
+                        disabled={editable}
+                        value={details.name}
+                        onChange={(e) =>
+                          setDetails({ ...details, name: e.target.value })
+                        }
+                        placeholder="Full Name"
+                      />
+                    </div>
+                    <div className="col-sm-6">
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="inputFullName"
+                        value={details.number || ""}
+                        onChange={(e) =>
+                          setDetails({ ...details, number: e.target.value })
+                        }
+                        disabled={editable}
+                        name="number"
+                        placeholder="10-digit number"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="mb-3">
-              <p className="mb-2">
-                Your Gender{" "}
-                <button className="ms-4 text-primary px-2 rounded-5">
+              <div className="mb-3">
+                <p className="mb-2">
+                  Your Gender{" "}
+                  {/* <button className="ms-4 text-primary px-2 rounded-5">
                   Edit
-                </button>
-              </p>
-              <span className="pe-4">
-                <input
-                  className="me-2"
-                  type="radio"
-                  name="gender"
-                  id="genderMale"
-                />
-                <label htmlFor="genderMale">Male</label>
-              </span>
-              <span>
-                <input
-                  className="me-2"
-                  type="radio"
-                  name="gender"
-                  id="genderMale"
-                />
-                <label htmlFor="genderMale">Male</label>
-              </span>
-            </div>
-            <div className="mb-3">
-              <h6 className="mb-2">
-                Email Address{" "}
-                <button className="ms-4 text-primary px-2 rounded-5">
-                  Edit
-                </button>
-              </h6>
-              <input
-                type="email"
-                disabled
-                className="form-control"
-                value={"john@gmail.com"}
-              />
-            </div>
-            <div className="form-group col-12">
-              <p className="col-sm-offset-2 col-sm-10 help-block">address</p>
-              <textarea
-                name="message"
-                id=""
-                rows="5"
-                className="col-12"
-                placeholder="Street address, P.O. box, company name, c/o Apartment, suite , unit, building, floor, etc."
-              ></textarea>
-            </div>
-            <div className="form-group">
-              <label htmlFor="selectCountry" className="col-sm-2 control-label">
-                Country
-              </label>
-              <div className="col-sm-10">
-                <select
-                  className="form-control"
-                  id="selectCountry"
-                  name="country"
-                >
-                  <option value="" selected="selected">
-                    (please select a country)
-                  </option>
-                  <option value="AF">Afghanistan</option>
-                  <option value="AL">Albania</option>
-                  <option value="DZ">Algeria</option>
-                </select>
+                </button> */}
+                </p>
+                <span className="pe-4">
+                  <input
+                    className="me-2"
+                    type="radio"
+                    name="gender"
+                    id="genderMale"
+                    value="male"
+                    checked={details.gender === "male"}
+                    onChange={(e) =>
+                      setDetails({ ...details, gender: e.target.value })
+                    }
+                  />
+                  <label htmlFor="genderMale">Male</label>
+                </span>
+                <span>
+                  <input
+                    className="me-2"
+                    type="radio"
+                    name="gender"
+                    id="genderFemale"
+                    value="female"
+                    checked={details.gender === "female"}
+                    onChange={(e) =>
+                      setDetails({ ...details, gender: e.target.value })
+                    }
+                  />
+                  <label htmlFor="genderMale">FeMale</label>
+                </span>
               </div>
-            </div>
+              <div className="mb-3">
+                <h6 className="mb-2">
+                  Email Address{" "}
+                  {/* <button className="ms-4 text-primary px-2 rounded-5">
+                  Edit
+                </button> */}
+                </h6>
+                <input
+                  type="email"
+                  disabled
+                  value={details.email}
+                  onChange={(e) =>
+                    setDetails({ ...details, email: e.target.value })
+                  }
+                  className="form-control"
+                />
+              </div>
+              <div className="form-group col-12">
+                <p className="col-sm-offset-2 col-sm-10 help-block">address</p>
+                <textarea
+                  name="message"
+                  id=""
+                  rows="5"
+                  value={details.address}
+                  onChange={(e) =>
+                    setDetails({ ...details, address: e.target.value })
+                  }
+                  className="col-12 p-2"
+                  placeholder="Apartment,  Street address, P.O. box,building, floor, etc."
+                ></textarea>
+              </div>
+              <div className="form-group">
+                <label
+                  htmlFor="selectCountry"
+                  className="col-sm-2 control-label"
+                >
+                  Country
+                </label>
+                <div className="col-sm-10">
+                  <select
+                    className="form-control"
+                    id="selectCountry"
+                    name="country"
+                    defaultValue={details.country}
+                    onChange={(e) =>
+                      setDetails({ ...details, country: e.target.value })
+                    }
+                  >
+                    <option value="default">(please select a country)</option>
+                    <option value="tn">TamilNadu</option>
+                    <option value="kl">Kerala</option>
+                    <option value="ap">Andhra</option>
+                  </select>
+                </div>
+              </div>
+              <button
+                className="btn btn-solid py-1 px-5 rounded-5 mt-3"
+                onClick={() => {}}
+              >
+                Confirm and update details
+              </button>
+            </form>
           </div>
-          {/* manage address */}
-          {/* <AddressForm /> */}
         </div>
         <div className="text-start">
           <div className="px-3 py-3 d-flex gap-2 align-items-end justify-content-start">

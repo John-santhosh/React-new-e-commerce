@@ -1,17 +1,11 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import image from "../assets/login-form1.avif";
-import {
-  // createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../config/Config";
-import { useEffect, useRef } from "react";
+import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
-import Hero from "./Hero";
 
 const Login = () => {
   const { createUser, current_user, userLogged, googleSignUp } =
@@ -25,9 +19,10 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, passwd)
       .then((userCredential) => {
         const user = userCredential.user.displayName;
+        const uid = userCredential.user.uid;
         // console.log(userCredential);
         // console.log(current_user);
-        createUser(user);
+        createUser(user, uid);
         toast.success("login successful");
       })
       .catch((error) => {
@@ -43,7 +38,7 @@ const Login = () => {
   //     .then(() => {
   //       // Password reset email sent!
   //       // ..
-  //       toast.success("Serification E-mail Sent");
+  //       toast.success("verification E-mail Sent");
   //     })
   //     .catch((error) => {
   //       const errorCode = error.code;

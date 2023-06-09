@@ -14,7 +14,7 @@ import {
   GET_TOTAL,
 } from "../actions";
 const CartProvider = createContext();
-import { setDoc, doc, getDoc } from "firebase/firestore";
+import { setDoc, doc, getDoc, collection } from "firebase/firestore";
 import { db } from "../config/Config";
 import { useUserContext } from "./UserContext";
 
@@ -27,14 +27,14 @@ const CartContext = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   // console.log(initialState.cart);
 
-  const { current_user, user_cart } = useUserContext();
+  const { current_user, user_cart, current_user_id } = useUserContext();
 
-  const postData = async (object) => {
-    if (current_user === "") {
+  const postData = async (object, collection) => {
+    if (!current_user_id) {
       return;
     }
     try {
-      await setDoc(doc(db, current_user, "cart"), {
+      await setDoc(doc(db, current_user_id, collection), {
         cart: object,
       });
     } catch (e) {
@@ -48,7 +48,7 @@ const CartContext = ({ children }) => {
 
   useEffect(() => {
     dispatch({ type: GET_TOTAL });
-    postData(state.cart);
+    postData(state.cart, "cart");
     localStorage.setItem("cart", JSON.stringify(state.cart));
   }, [state.cart]);
 
@@ -82,7 +82,14 @@ const CartContext = ({ children }) => {
 
   return (
     <CartProvider.Provider
-      value={{ ...state, addItem, removeItem, ToggleCount, clearCart }}
+      value={{
+        ...state,
+        addItem,
+        removeItem,
+        ToggleCount,
+        clearCart,
+        postData,
+      }}
     >
       {children}
     </CartProvider.Provider>

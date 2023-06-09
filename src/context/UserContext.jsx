@@ -9,7 +9,6 @@ import { auth, db, provider } from "../config/Config";
 import {
   GoogleAuthProvider,
   onAuthStateChanged,
-  signInWithPopup,
   signInWithRedirect,
 } from "firebase/auth";
 import { toast } from "react-toastify";
@@ -32,6 +31,7 @@ const initialState = {
   current_user: "",
   userLogged: false,
   user_cart: getLocalStorage(),
+  current_user_id: null,
 };
 
 const UserContextProvider = ({ children }) => {
@@ -41,16 +41,21 @@ const UserContextProvider = ({ children }) => {
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        createUser(user.displayName);
+        console.log(user.uid);
+        createUser(user.displayName, user.uid);
       }
     });
+    // console.log(state);
   }, []);
 
   const readData = async (user) => {
-    if (user === "") {
+    console.log(user);
+    if (!user) {
       // dispatch({ type: "CREATE_EXISTING_CART", payload: [] });
+      console.log(null);
       return;
     }
+    console.log(state.current_user);
     const docRef = doc(db, state.current_user, "cart");
     // console.log(user);
     const docSnap = await getDoc(docRef);
@@ -81,19 +86,22 @@ const UserContextProvider = ({ children }) => {
   };
 
   useEffect(() => {
+    console.log(state);
     readData(state.current_user);
     // postData([]);
   }, [state.current_user]);
+
   // create new user
-  function createUser(user) {
-    dispatch({ type: CREATE_NEW_USER, payload: user });
+  function createUser(user, id) {
+    console.log(user, id);
+    dispatch({ type: CREATE_NEW_USER, payload: { user, uid: id } });
     // dispatch({ type: CREATE_NEW_USER, payload: { email, passwd } });
   }
 
   //login existing user
-  const loginUser = (user, password) => {
-    dispatch({ type: LOGIN_EXISTING_USER, payload: { user, password } });
-  };
+  // const loginUser = (user, password) => {
+  //   dispatch({ type: LOGIN_EXISTING_USER, payload: { user, password } });
+  // };
 
   //sign put user
   const signOut = () => {
@@ -119,20 +127,13 @@ const UserContextProvider = ({ children }) => {
         // ...
       })
       .catch((error) => {
-        // Handle Errors here.
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        // The email of the user's account used.
-        const email = error.customData.email;
-        // The AuthCredential type that was used.
-        const credential = GoogleAuthProvider.credentialFromError(error);
-        // ...
+        console.log(error);
       });
   };
 
   return (
     <UserContext.Provider
-      value={{ ...state, loginUser, createUser, signOut, googleSignUp }}
+      value={{ ...state, createUser, signOut, googleSignUp }}
     >
       {children}
     </UserContext.Provider>

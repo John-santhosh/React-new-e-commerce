@@ -6,19 +6,40 @@ import {
   updateProfile,
   signOut,
 } from "firebase/auth";
-import { auth } from "../config/Config";
+import { auth, db } from "../config/Config";
 import { useRef } from "react";
 import { toast } from "react-toastify";
 import { useUserContext } from "../context/UserContext";
 import { FcGoogle } from "react-icons/fc";
+import { useCartContext } from "../context/CartContext";
+import { doc, setDoc } from "firebase/firestore";
 
 const Register = () => {
-  const { userLogged, current_user } = useUserContext();
-  const { googleSignUp } = useUserContext();
+  const {
+    userLogged,
+    current_user,
+    current_user_id,
+    googleSignUp,
+    signOut: signout,
+  } = useUserContext();
   const email = useRef();
   const password = useRef();
   const name = useRef();
   const navigate = useNavigate();
+
+  // post data
+  const postData = async (data, id) => {
+    console.log(data, id);
+    try {
+      console.log(data, id);
+      await setDoc(doc(db, id, "userInfo"), {
+        userInfo: data,
+      });
+      console.log("success");
+    } catch (e) {
+      console.error("Error adding document: ");
+    }
+  };
 
   // sign in with userName
   const registerNewUser = (e) => {
@@ -33,8 +54,24 @@ const Register = () => {
         toast.success("Register successful");
         updateProfile(auth.currentUser, {
           displayName: Name,
+        }).then(() => {
+          // console.log("success");
+
+          console.log(user.displayName, user.uid);
+          const data = {
+            name: user.displayName,
+            number: null,
+            gender: "",
+            email: user.email,
+            address: "",
+            country: "",
+          };
+          console.log(data, user.uid);
+          postData(data, user.uid);
+          signOut(auth).then(() => {
+            signout();
+          });
         });
-        signOut(auth);
         navigate("/login");
       })
       .catch((error) => {
