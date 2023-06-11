@@ -20,7 +20,12 @@ const MyAccount = () => {
   const { clearCart } = useCartContext();
   const { signOut: logOut, userLogged, current_user_id } = useUserContext();
 
-  const [editable, setEditable] = useState(true);
+  const [editable, setEditable] = useState({
+    p_details: true,
+    gender: true,
+    address: true,
+    state: true,
+  });
   const [details, setDetails] = useState({
     name: "",
     number: null,
@@ -39,6 +44,12 @@ const MyAccount = () => {
         console.log("success");
         readData(current_user_id);
         toast.success("updated");
+        setEditable({
+          p_details: true,
+          gender: true,
+          address: true,
+          state: true,
+        });
       });
     } catch (e) {
       console.error("Error adding document: ");
@@ -104,7 +115,12 @@ const MyAccount = () => {
                   Personal Information
                   <button
                     className="ms-4 text-primary px-2 rounded-5"
-                    onClick={() => setEditable(!editable)}
+                    onClick={() =>
+                      setEditable({
+                        ...editable,
+                        p_details: !editable.p_details,
+                      })
+                    }
                     type="button"
                   >
                     Edit
@@ -118,7 +134,7 @@ const MyAccount = () => {
                         className="form-control"
                         id="inputFullName"
                         name="full-name"
-                        disabled={editable}
+                        disabled={editable.p_details}
                         value={details.name}
                         onChange={(e) =>
                           setDetails({ ...details, name: e.target.value })
@@ -135,7 +151,7 @@ const MyAccount = () => {
                         onChange={(e) =>
                           setDetails({ ...details, number: e.target.value })
                         }
-                        disabled={editable}
+                        disabled={editable.p_details}
                         name="number"
                         placeholder="10-digit number"
                       />
@@ -146,9 +162,15 @@ const MyAccount = () => {
               <div className="mb-3">
                 <p className="mb-2">
                   Your Gender{" "}
-                  {/* <button className="ms-4 text-primary px-2 rounded-5">
-                  Edit
-                </button> */}
+                  <button
+                    className="ms-4 text-primary px-2 rounded-5"
+                    type="button"
+                    onClick={() =>
+                      setEditable({ ...editable, gender: !editable.gender })
+                    }
+                  >
+                    Edit
+                  </button>
                 </p>
                 <span className="pe-4">
                   <input
@@ -157,10 +179,11 @@ const MyAccount = () => {
                     name="gender"
                     id="genderMale"
                     value="male"
+                    disabled={editable.gender}
                     checked={details.gender === "male"}
-                    onChange={(e) =>
-                      setDetails({ ...details, gender: e.target.value })
-                    }
+                    onChange={(e) => {
+                      setDetails({ ...details, gender: e.target.value });
+                    }}
                   />
                   <label htmlFor="genderMale">Male</label>
                 </span>
@@ -171,6 +194,7 @@ const MyAccount = () => {
                     name="gender"
                     id="genderFemale"
                     value="female"
+                    disabled={editable.gender}
                     checked={details.gender === "female"}
                     onChange={(e) =>
                       setDetails({ ...details, gender: e.target.value })
@@ -183,8 +207,8 @@ const MyAccount = () => {
                 <h6 className="mb-2">
                   Email Address{" "}
                   {/* <button className="ms-4 text-primary px-2 rounded-5">
-                  Edit
-                </button> */}
+                    Edit
+                  </button> */}
                 </h6>
                 <input
                   type="email"
@@ -197,11 +221,23 @@ const MyAccount = () => {
                 />
               </div>
               <div className="form-group col-12">
-                <p className="col-sm-offset-2 col-sm-10 help-block">address</p>
+                <p className="col-sm-offset-2 col-sm-10 help-block mb-2">
+                  Address
+                  <button
+                    type="button"
+                    className="ms-4 text-primary px-2 rounded-5"
+                    onClick={() =>
+                      setEditable({ ...editable, address: !editable.address })
+                    }
+                  >
+                    Edit
+                  </button>
+                </p>
                 <textarea
                   name="message"
                   id=""
                   rows="5"
+                  disabled={editable.address}
                   value={details.address}
                   onChange={(e) =>
                     setDetails({ ...details, address: e.target.value })
@@ -210,19 +246,28 @@ const MyAccount = () => {
                   placeholder="Apartment,  Street address, P.O. box,building, floor, etc."
                 ></textarea>
               </div>
-              <div className="form-group">
+              <div className="form-group mt-3">
                 <label
                   htmlFor="selectCountry"
-                  className="col-sm-2 control-label"
+                  className="col-sm-2 control-label mb-2"
                 >
-                  State
+                  State{" "}
+                  <button
+                    type="button"
+                    className="ms-4 text-primary px-2 rounded-5"
+                    onClick={() =>
+                      setEditable({ ...editable, state: !editable.state })
+                    }
+                  >
+                    Edit
+                  </button>
                 </label>
                 <div className="col-sm-10">
-                  {console.log(details.country)}
                   <select
                     className="form-control"
                     id="selectCountry"
                     name="country"
+                    disabled={editable.state}
                     onChange={(e) =>
                       setDetails({ ...details, country: e.target.value })
                     }
@@ -245,10 +290,7 @@ const MyAccount = () => {
                   </select>
                 </div>
               </div>
-              <button
-                className="btn btn-solid py-1 px-5 rounded-5 mt-3"
-                onClick={() => {}}
-              >
+              <button className="btn btn-solid py-1 px-5 rounded-5 mt-3">
                 Confirm and update details
               </button>
             </form>
